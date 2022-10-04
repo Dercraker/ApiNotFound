@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ErrorRepository;
 use App\Entity\Error;
+use App\Repository\MessagesRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ErrorController extends AbstractController
@@ -77,24 +79,64 @@ class ErrorController extends AbstractController
    * @return JsonResponse
    */
   #[Route('/api/error/', name: 'error.create', methods: ['POST'])]
-  public function createError(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
   {
     $error = $serializer->deserialize(
       $request->getContent(),
       Error::class,
       'json'
     );
-
     $error->setStatus(true);
 
+
+    $content = $request->toArray();
+    $message = $messageRepo->find($content['idMessage']) ?? -1;
+    $error->addMessage($message);
 
     $entityManager->persist($error);
     $entityManager->flush();
 
     $jsonError = $serializer->serialize($error, 'json', ['groups' => 'getError']);
-
     $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
     return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
+  }
+
+  #[Route('/api/error/{errorId}', name: 'error.update', methods: ['PUT'])]
+  #[ParamConverter('error', options: ['id' => 'errorId'])]
+  public function updateError(Error $error, Request $request, MessagesRepository $messageRepo, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  {
+    $updateError = $serializer->deserialize(
+      $request->getContent(),
+      Error::class,
+      'json',
+      [AbstractNormalizer::OBJECT_TO_POPULATE => $error]
+    );
+    $updateError->setStatus(true);
+
+    $content = $request->toArray();
+    dd($content['idMessages']);
+
+    $messagesToRemove = $error->getMessages();
+
+    foreach ($messagesToRemove as $message) {
+      $error->removeMessage($message);
+    }
+
+    foreach ($content['idMessages'] as $idMessage) {
+      // $message = $messageRepo->find($idMessage) ?? -1;
+      $error->addMessage($messageRepo->find($idMessage) ?? -1);
+    }
+
+
+    $message = $messageRepo->find($content['idMessages']) ?? -1;
+    $error->addMessage($message);
+
+    $entityManager->persist($error);
+    $entityManager->flush();
+
+    $jsonError = $serializer->serialize($error, 'json', ['groups' => 'getError']);
+    $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+    return new JsonResponse($jsonError, Response::HTTP_OK, ['location' => $location], true);
   }
 
   /**
