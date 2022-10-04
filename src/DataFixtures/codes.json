@@ -1,253 +1,379 @@
 [{
-        "status": 100,
+        "code": 100,
+        "dogPicture": "https://http.dog/100.jpg",
+        "catPicture": "https://http.cat/100.jpg",
         "message": "Continue "
     },
     {
-        "status": 101,
+        "code": 101,
+        "dogPicture": "https://http.dog/101.jpg",
+        "catPicture": "https://http.cat/101.jpg",
         "message": "Switching Protocols "
     },
     {
-        "status": 102,
+        "code": 102,
+        "dogPicture": "https://http.dog/102.jpg",
+        "catPicture": "https://http.cat/102.jpg",
         "message": "Processing "
     },
     {
-        "status": 200,
+        "code": 200,
+        "dogPicture": "https://http.dog/200.jpg",
+        "catPicture": "https://http.cat/200.jpg",
         "message": "OK "
     },
     {
-        "status": 201,
+        "code": 201,
+        "dogPicture": "https://http.dog/201.jpg",
+        "catPicture": "https://http.cat/201.jpg",
         "message": "Created "
     },
     {
-        "status": 202,
+        "code": 202,
+        "dogPicture": "https://http.dog/202.jpg",
+        "catPicture": "https://http.cat/202.jpg",
         "message": "Accepted "
     },
     {
-        "status": 203,
+        "code": 203,
+        "dogPicture": "https://http.dog/203.jpg",
+        "catPicture": "https://http.cat/203.jpg",
         "message": "Non - authoritative Information "
     },
     {
-        "status": 204,
+        "code": 204,
+        "dogPicture": "https://http.dog/204.jpg",
+        "catPicture": "https://http.cat/204.jpg",
         "message": "No Content "
     },
     {
-        "status": 205,
+        "code": 205,
+        "dogPicture": "https://http.dog/205.jpg",
+        "catPicture": "https://http.cat/205.jpg",
         "message": "Reset Content "
     },
     {
-        "status": 206,
+        "code": 206,
+        "dogPicture": "https://http.dog/206.jpg",
+        "catPicture": "https://http.cat/206.jpg",
         "message": "Partial Content "
     },
     {
-        "status": 207,
-        "message": "Multi - Status"
+        "code": 207,
+        "dogPicture": "https://http.dog/207.jpg",
+        "catPicture": "https://http.cat/207.jpg",
+        "message": "Multi - code "
     },
     {
-        "status": 208,
+        "code": 208,
+        "dogPicture": "https://http.dog/208.jpg",
+        "catPicture": "https://http.cat/208.jpg",
         "message": "Already Reported "
     },
     {
-        "status": 226,
+        "code": 226,
+        "dogPicture": "https://http.dog/226.jpg",
+        "catPicture": "https://http.cat/226.jpg",
         "message": "IM Used "
     },
     {
-        "status": 300,
+        "code": 300,
+        "dogPicture": "https://http.dog/300.jpg",
+        "catPicture": "https://http.cat/300.jpg",
         "message": "Multiple Choices "
     },
     {
-        "status": 301,
+        "code": 301,
+        "dogPicture": "https://http.dog/301.jpg",
+        "catPicture": "https://http.cat/301.jpg",
         "message": "Moved Permanently "
     },
     {
-        "status": 302,
+        "code": 302,
+        "dogPicture": "https://http.dog/302.jpg",
+        "catPicture": "https://http.cat/302.jpg",
         "message": "Found "
     },
     {
-        "status": 303,
+        "code": 303,
+        "dogPicture": "https://http.dog/303.jpg",
+        "catPicture": "https://http.cat/303.jpg",
         "message": "See Other "
     },
     {
-        "status": 304,
+        "code": 304,
+        "dogPicture": "https://http.dog/304.jpg",
+        "catPicture": "https://http.cat/304.jpg",
         "message": "Not Modified "
     },
     {
-        "status": 305,
+        "code": 305,
+        "dogPicture": "https://http.dog/305.jpg",
+        "catPicture": "https://http.cat/305.jpg",
         "message": "Use Proxy "
     },
     {
-        "status": 307,
+        "code": 307,
+        "dogPicture": "https://http.dog/307.jpg",
+        "catPicture": "https://http.cat/307.jpg",
         "message": "Temporary Redirect "
     },
     {
-        "status": 308,
+        "code": 308,
+        "dogPicture": "https://http.dog/308.jpg",
+        "catPicture": "https://http.cat/308.jpg",
         "message": "Permanent Redirect "
     },
     {
-        "status": 400,
+        "code": 400,
+        "dogPicture": "https://http.dog/400.jpg",
+        "catPicture": "https://http.cat/400.jpg",
         "message": "Bad Request "
     },
     {
-        "status": 401,
+        "code": 401,
+        "dogPicture": "https://http.dog/401.jpg",
+        "catPicture": "https://http.cat/401.jpg",
         "message": "Unauthorized "
     },
     {
-        "status": 402,
+        "code": 402,
+        "dogPicture": "https://http.dog/402.jpg",
+        "catPicture": "https://http.cat/402.jpg",
         "message": "Payment Required "
     },
     {
-        "status": 403,
+        "code": 403,
+        "dogPicture": "https://http.dog/403.jpg",
+        "catPicture": "https://http.cat/403.jpg",
         "message": "Forbidden "
     },
     {
-        "status": 404,
+        "code": 404,
+        "dogPicture": "https://http.dog/404.jpg",
+        "catPicture": "https://http.cat/404.jpg",
         "message": "Not Found "
     },
     {
-        "status": 405,
+        "code": 405,
+        "dogPicture": "https://http.dog/405.jpg",
+        "catPicture": "https://http.cat/405.jpg",
         "message": "Method Not Allowed "
     },
     {
-        "status": 406,
+        "code": 406,
+        "dogPicture": "https://http.dog/406.jpg",
+        "catPicture": "https://http.cat/406.jpg",
         "message": "Not Acceptable "
     },
     {
-        "status": 407,
+        "code": 407,
+        "dogPicture": "https://http.dog/407.jpg",
+        "catPicture": "https://http.cat/407.jpg",
         "message": "Proxy Authentication Required "
     },
     {
-        "status": 408,
+        "code": 408,
+        "dogPicture": "https://http.dog/408.jpg",
+        "catPicture": "https://http.cat/408.jpg",
         "message": "Request Timeout "
     },
     {
-        "status": 409,
+        "code": 409,
+        "dogPicture": "https://http.dog/409.jpg",
+        "catPicture": "https://http.cat/409.jpg",
         "message": "Conflict "
     },
     {
-        "status": 410,
+        "code": 410,
+        "dogPicture": "https://http.dog/410.jpg",
+        "catPicture": "https://http.cat/410.jpg",
         "message": "Gone "
     },
     {
-        "status": 411,
+        "code": 411,
+        "dogPicture": "https://http.dog/411.jpg",
+        "catPicture": "https://http.cat/411.jpg",
         "message": "Length Required "
     },
     {
-        "status": 412,
+        "code": 412,
+        "dogPicture": "https://http.dog/412.jpg",
+        "catPicture": "https://http.cat/412.jpg",
         "message": "Precondition Failed "
     },
     {
-        "status": 413,
+        "code": 413,
+        "dogPicture": "https://http.dog/413.jpg",
+        "catPicture": "https://http.cat/413.jpg",
         "message": "Payload Too Large "
     },
     {
-        "status": 414,
+        "code": 414,
+        "dogPicture": "https://http.dog/414.jpg",
+        "catPicture": "https://http.cat/414.jpg",
         "message": "Request - URI Too Long "
     },
     {
-        "status": 415,
+        "code": 415,
+        "dogPicture": "https://http.dog/415.jpg",
+        "catPicture": "https://http.cat/415.jpg",
         "message": "Unsupported Media Type "
     },
     {
-        "status": 416,
+        "code": 416,
+        "dogPicture": "https://http.dog/416.jpg",
+        "catPicture": "https://http.cat/416.jpg",
         "message": "Requested Range Not Satisfiable "
     },
     {
-        "status": 417,
+        "code": 417,
+        "dogPicture": "https://http.dog/417.jpg",
+        "catPicture": "https://http.cat/417.jpg",
         "message": "Expectation Failed "
     },
     {
-        "status": 418,
+        "code": 418,
+        "dogPicture": "https://http.dog/418.jpg",
+        "catPicture": "https://http.cat/418.jpg",
         "message": "I’m a teapot "
     },
     {
-        "status": 421,
+        "code": 421,
+        "dogPicture": "https://http.dog/421.jpg",
+        "catPicture": "https://http.cat/421.jpg",
         "message": "Misdirected Request "
     },
     {
-        "status": 422,
+        "code": 422,
+        "dogPicture": "https://http.dog/422.jpg",
+        "catPicture": "https://http.cat/422.jpg",
         "message": "Unprocessable Entity "
     },
     {
-        "status": 423,
+        "code": 423,
+        "dogPicture": "https://http.dog/423.jpg",
+        "catPicture": "https://http.cat/423.jpg",
         "message": "Locked "
     },
     {
-        "status": 424,
+        "code": 424,
+        "dogPicture": "https://http.dog/424.jpg",
+        "catPicture": "https://http.cat/424.jpg",
         "message": "Failed Dependency "
     },
     {
-        "status": 426,
+        "code": 426,
+        "dogPicture": "https://http.dog/426.jpg",
+        "catPicture": "https://http.cat/426.jpg",
         "message": "Upgrade Required "
     },
     {
-        "status": 428,
+        "code": 428,
+        "dogPicture": "https://http.dog/428.jpg",
+        "catPicture": "https://http.cat/428.jpg",
         "message": "Precondition Required "
     },
     {
-        "status": 429,
+        "code": 429,
+        "dogPicture": "https://http.dog/429.jpg",
+        "catPicture": "https://http.cat/429.jpg",
         "message": "Too Many Requests "
     },
     {
-        "status": 431,
+        "code": 431,
+        "dogPicture": "https://http.dog/431.jpg",
+        "catPicture": "https://http.cat/431.jpg",
         "message": "Request Header Fields Too Large "
     },
     {
-        "status": 444,
+        "code": 444,
+        "dogPicture": "https://http.dog/444.jpg",
+        "catPicture": "https://http.cat/444.jpg",
         "message": "Connection Closed Without Response "
     },
     {
-        "status": 451,
+        "code": 451,
+        "dogPicture": "https://http.dog/451.jpg",
+        "catPicture": "https://http.cat/451.jpg",
         "message": "Unavailable For Legal Reasons "
     },
     {
-        "status": 499,
+        "code": 499,
+        "dogPicture": "https://http.dog/499.jpg",
+        "catPicture": "https://http.cat/499.jpg",
         "message": "Client Closed Request "
     },
     {
-        "status": 500,
+        "code": 500,
+        "dogPicture": "https://http.dog/500.jpg",
+        "catPicture": "https://http.cat/500.jpg",
         "message": "Internal Server Error "
     },
     {
-        "status": 501,
+        "code": 501,
+        "dogPicture": "https://http.dog/501.jpg",
+        "catPicture": "https://http.cat/501.jpg",
         "message": "Not Implemented "
     },
     {
-        "status": 502,
+        "code": 502,
+        "dogPicture": "https://http.dog/502.jpg",
+        "catPicture": "https://http.cat/502.jpg",
         "message": "Bad Gateway "
     },
     {
-        "status": 503,
+        "code": 503,
+        "dogPicture": "https://http.dog/503.jpg",
+        "catPicture": "https://http.cat/503.jpg",
         "message": "Service Unavailable "
     },
     {
-        "status": 504,
+        "code": 504,
+        "dogPicture": "https://http.dog/504.jpg",
+        "catPicture": "https://http.cat/504.jpg",
         "message": "Gateway Timeout "
     },
     {
-        "status": 505,
+        "code": 505,
+        "dogPicture": "https://http.dog/505.jpg",
+        "catPicture": "https://http.cat/505.jpg",
         "message": "HTTP Version Not Supported "
     },
     {
-        "status": 506,
+        "code": 506,
+        "dogPicture": "https://http.dog/506.jpg",
+        "catPicture": "https://http.cat/506.jpg",
         "message": "Variant Also Negotiates "
     },
     {
-        "status": 507,
+        "code": 507,
+        "dogPicture": "https://http.dog/507.jpg",
+        "catPicture": "https://http.cat/507.jpg",
         "message": "Insufficient Storage "
     },
     {
-        "status": 508,
+        "code": 508,
+        "dogPicture": "https://http.dog/508.jpg",
+        "catPicture": "https://http.cat/508.jpg",
         "message": "Loop Detected "
     },
     {
-        "status": 510,
+        "code": 510,
+        "dogPicture": "https://http.dog/510.jpg",
+        "catPicture": "https://http.cat/510.jpg",
         "message": "Not Extended "
     },
     {
-        "status": 511,
+        "code": 511,
+        "dogPicture": "https://http.dog/511.jpg",
+        "catPicture": "https://http.cat/511.jpg",
         "message": "Network Authentication Required "
     },
     {
-        "status": 599,
+        "code": 599,
+        "dogPicture": "https://http.dog/599.jpg",
+        "catPicture": "https://http.cat/599.jpg",
         "message": "Network Connect Timeout Error"
     }
 ]

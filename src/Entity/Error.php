@@ -21,20 +21,17 @@ class Error
   #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
   private ?string $Code = null;
 
-  #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
-  private ?string $Message = null;
-
   #[ORM\Column]
   private ?bool $status = null;
 
-  #[ORM\OneToMany(mappedBy: 'pictureLink', targetEntity: Pictures::class, orphanRemoval: true)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
-  private Collection $pictures;
+  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
+  private Collection $messages;
+
 
   public function __construct()
   {
     $this->pictures = new ArrayCollection();
+    $this->messages = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -54,18 +51,6 @@ class Error
     return $this;
   }
 
-  public function getMessage(): ?string
-  {
-    return $this->Message;
-  }
-
-  public function setMessage(string $Message): self
-  {
-    $this->Message = $Message;
-
-    return $this;
-  }
-
   public function isStatus(): ?bool
   {
     return $this->status;
@@ -79,32 +64,32 @@ class Error
   }
 
   /**
-   * @return Collection<int, Pictures>
+   * @return Collection<int, Messages>
    */
-  public function getPictures(): Collection
+  public function getMessages(): Collection
   {
-    return $this->pictures;
+      return $this->messages;
   }
 
-  public function addPicture(Pictures $picture): self
+  public function addMessage(Messages $message): self
   {
-    if (!$this->pictures->contains($picture)) {
-      $this->pictures->add($picture);
-      $picture->setPictureLink($this);
-    }
-
-    return $this;
-  }
-
-  public function removePicture(Pictures $picture): self
-  {
-    if ($this->pictures->removeElement($picture)) {
-      // set the owning side to null (unless already changed)
-      if ($picture->getPictureLink() === $this) {
-        $picture->setPictureLink(null);
+      if (!$this->messages->contains($message)) {
+          $this->messages->add($message);
+          $message->setError($this);
       }
-    }
 
-    return $this;
+      return $this;
+  }
+
+  public function removeMessage(Messages $message): self
+  {
+      if ($this->messages->removeElement($message)) {
+          // set the owning side to null (unless already changed)
+          if ($message->getError() === $this) {
+              $message->setError(null);
+          }
+      }
+
+      return $this;
   }
 }
