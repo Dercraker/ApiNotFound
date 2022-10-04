@@ -2,43 +2,31 @@
 
 namespace App\Controller;
 
-use App\Repository\ErrorRepository;
 use App\Entity\Error;
+use App\Repository\ErrorRepository;
 use App\Repository\MessagesRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+#[Route('/api')]
 class ErrorController extends AbstractController
 {
-  /**
-   * Route qui permet de ping l'api
-   * @return JsonResponse
-   */
-  #[Route('/error', name: 'app_error', methods: ['GET'])]
-  public function index(): JsonResponse
-  {
-    return $this->json([
-      'message' => 'Welcome to your new controller!',
-      'path' => 'src/Controller/ErrorController.php',
-    ]);
-  }
-
   /**
    * Route qui permet de récupérer les erreurs
    * @param ErrorRepository $errorRepository
    * @param SerializerInterface $serializer
    * @return JsonResponse
    */
-  #[Route('/api/errors', name: 'error.getAll', methods: ['GET'])]
+  #[Route('/errors', name: 'error.getAll', methods: ['GET'])]
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
     $errors = $repository->findAll();
@@ -48,20 +36,15 @@ class ErrorController extends AbstractController
 
   /**
    * Route qui permet de récupérer une erreur
+   * @method GET getError()
+   * 
    * @param int $errorID
    * @param ErrorRepository $errorRepository
    * @param SerializerInterface $serializer
+   * 
    * @return JsonResponse
    */
-  // #[Route('/api/error/{errorId}', name: 'error.get', methods: ['GET'])]
-  // public function getError(int $errorId, ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
-  // {
-  //   $error = $repository->find($errorId);
-  //   $jsonError = $serializerInterface->serialize($error, 'json');
-  //   return $error ? new JsonResponse($jsonError, Response::HTTP_OK, [], true) :
-  //     new JsonResponse(['message' => 'error not found'], Response::HTTP_NOT_FOUND);
-  // }
-  #[Route('/api/error/{errorId}', name: 'error.get', methods: ['GET'])]
+  #[Route('/error/{errorId}', name: 'error.get', methods: ['GET'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function getError(Error $error, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -71,15 +54,17 @@ class ErrorController extends AbstractController
 
   /**
    * Create a new error
+   * @method POST createError()
    *
    * @param Request $request
    * @param EntityManagerInterface $entityManager
    * @param SerializerInterface $serializer
    * @param UrlGeneratorInterface $urlGenerator
+   * 
    * @return JsonResponse
    */
-  #[Route('/api/error/', name: 'error.create', methods: ['POST'])]
-  public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  #[Route('/error/', name: 'error.create', methods: ['POST'])]
+  public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
   {
     $error = $serializer->deserialize(
       $request->getContent(),
@@ -93,6 +78,10 @@ class ErrorController extends AbstractController
     $message = $messageRepo->find($content['idMessage']) ?? -1;
     $error->addMessage($message);
 
+    $fails = $validator->validate($error);
+
+    if ($fails->count() > 0) return new JsonResponse($serializer->serialize($fails, 'json'), Response::HTTP_BAD_REQUEST, [], true);
+
     $entityManager->persist($error);
     $entityManager->flush();
 
@@ -101,7 +90,20 @@ class ErrorController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
   }
 
-  #[Route('/api/error/{errorId}', name: 'error.update', methods: ['PUT'])]
+  /**
+   * Route qui permet de modifier une erreur
+   * @method PUT updateError()
+   * 
+   * @param Error $error
+   * @param Request $request
+   * @param MessageRepository $messageRepo
+   * @param EntityManagerInterface $entityManager
+   * @param SerializerInterface $serializer
+   * @param UrlGeneratorInterface $urlGenerator
+   * 
+   * @return JsonResponse
+   */
+  #[Route('/error/{errorId}', name: 'error.update', methods: ['PUT'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function updateError(Error $error, Request $request, MessagesRepository $messageRepo, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
   {
@@ -141,11 +143,14 @@ class ErrorController extends AbstractController
 
   /**
    * Route qui permet de désactiver une erreur
+   * @method DELETE disableError()
+   * 
    * @param int $errorId
    * @param EntityManagerInterface $entityManager
+   * 
    * @return JsonResponse
    */
-  #[Route('/api/error/{errorId}', name: 'error.disable', methods: ['DELETE'])]
+  #[Route('/error/{errorId}', name: 'error.disable', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function disableError(Error $error, EntityManagerInterface $entityManager): JsonResponse
   {
@@ -160,11 +165,14 @@ class ErrorController extends AbstractController
 
   /**
    * Route qui permet de delete une erreur
+   * @method DELETE deleteError()
+   * 
    * @param int $errorId
    * @param EntityManagerInterface $entityManager
+   * 
    * @return JsonResponse
    */
-  #[Route('/api/error/delete/{errorId}', name: 'error.delete', methods: ['DELETE'])]
+  #[Route('/error/delete/{errorId}', name: 'error.delete', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function deleteError(Error $error, EntityManagerInterface $entityManager): JsonResponse
   {

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ErrorRepository::class)]
 class Error
@@ -19,7 +20,8 @@ class Error
 
   #[ORM\Column(length: 255)]
   #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage'])]
-  private ?string $Code = null;
+  #[Assert\NotNull(message: "can not be null :/")]
+  private int $Code = 0;
 
   #[ORM\Column]
   private ?bool $status = null;
@@ -94,4 +96,5 @@ class Error
   }
 
   //TODO : RemoveAllMessages
+  //TODO : AddMessageByArray
 }
