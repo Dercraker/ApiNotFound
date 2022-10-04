@@ -23,8 +23,7 @@ class AppFixtures extends Fixture
       $code = $codesList[$i];
 
       $message = new Messages();
-      $message->setCode($code['code'])
-        ->setMessage($code['message'])
+      $message->setMessage($code['message'])
         ->setStatus(true);
       $listMessage[] = $message;
       $manager->persist($message);

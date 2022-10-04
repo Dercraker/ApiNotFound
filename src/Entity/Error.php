@@ -14,17 +14,18 @@ class Error
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
+  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
+  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage'])]
   private ?string $Code = null;
 
   #[ORM\Column]
   private ?bool $status = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
+  #[AnnotationGroups(['getAllErrors', 'getError'])]
   private Collection $messages;
 
 
@@ -68,28 +69,28 @@ class Error
    */
   public function getMessages(): Collection
   {
-      return $this->messages;
+    return $this->messages;
   }
 
   public function addMessage(Messages $message): self
   {
-      if (!$this->messages->contains($message)) {
-          $this->messages->add($message);
-          $message->setError($this);
-      }
+    if (!$this->messages->contains($message)) {
+      $this->messages->add($message);
+      $message->setError($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removeMessage(Messages $message): self
   {
-      if ($this->messages->removeElement($message)) {
-          // set the owning side to null (unless already changed)
-          if ($message->getError() === $this) {
-              $message->setError(null);
-          }
+    if ($this->messages->removeElement($message)) {
+      // set the owning side to null (unless already changed)
+      if ($message->getError() === $this) {
+        $message->setError(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 }
