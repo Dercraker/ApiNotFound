@@ -26,12 +26,11 @@ class Error
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
   #[AnnotationGroups(['getAllErrors', 'getError'])]
-  private Collection $messages;
+  private ?Collection $messages = null;
 
 
   public function __construct()
   {
-    $this->pictures = new ArrayCollection();
     $this->messages = new ArrayCollection();
   }
 

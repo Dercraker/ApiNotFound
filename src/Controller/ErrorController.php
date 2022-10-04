@@ -9,8 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ErrorController extends AbstractController
@@ -66,6 +68,36 @@ class ErrorController extends AbstractController
   }
 
   /**
+   * Create a new error
+   *
+   * @param Request $request
+   * @param EntityManagerInterface $entityManager
+   * @param SerializerInterface $serializer
+   * @param UrlGeneratorInterface $urlGenerator
+   * @return JsonResponse
+   */
+  #[Route('/api/error/', name: 'error.create', methods: ['POST'])]
+  public function createError(Request $request, EntityManagerInterface $entityManager, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  {
+    $error = $serializer->deserialize(
+      $request->getContent(),
+      Error::class,
+      'json'
+    );
+
+    $error->setStatus(true);
+
+
+    $entityManager->persist($error);
+    $entityManager->flush();
+
+    $jsonError = $serializer->serialize($error, 'json', ['groups' => 'getError']);
+
+    $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+    return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
+  }
+
+  /**
    * Route qui permet de désactiver une erreur
    * @param int $errorId
    * @param EntityManagerInterface $entityManager
@@ -76,6 +108,10 @@ class ErrorController extends AbstractController
   public function disableError(Error $error, EntityManagerInterface $entityManager): JsonResponse
   {
     $error->setStatus(false);
+    $messages = $error->getMessages();
+    foreach ($messages as $message) {
+      $message->setStatus(false);
+    }
     $entityManager->flush();
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
   }
