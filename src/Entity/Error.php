@@ -30,10 +30,14 @@ class Error
   #[AnnotationGroups(['getAllErrors', 'getError'])]
   private ?Collection $messages = null;
 
+  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
+  private Collection $pictures;
+
 
   public function __construct()
   {
     $this->messages = new ArrayCollection();
+    $this->pictures = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -95,6 +99,55 @@ class Error
     return $this;
   }
 
-  //TODO : RemoveAllMessages
-  //TODO : AddMessageByArray
+  /**
+   * remove all Messages on this error
+   *
+   * @return self
+   */
+  public function removeAllMessgaes(): self
+  {
+    foreach ($this->getMessages() as $message) {
+      $this->removeMessage($message);
+    }
+    return $this;
+  }
+
+  public function addMessageByIdArray(array $messagesId): self
+  {
+    foreach ($messagesId as $messageId) {
+      $this->addMessage($messageId);
+    }
+    return $this;
+  }
+  //TODO : AddMessageByArrayOfID
+
+  /**
+   * @return Collection<int, Pictures>
+   */
+  public function getPictures(): Collection
+  {
+      return $this->pictures;
+  }
+
+  public function addPicture(Pictures $picture): self
+  {
+      if (!$this->pictures->contains($picture)) {
+          $this->pictures->add($picture);
+          $picture->setError($this);
+      }
+
+      return $this;
+  }
+
+  public function removePicture(Pictures $picture): self
+  {
+      if ($this->pictures->removeElement($picture)) {
+          // set the owning side to null (unless already changed)
+          if ($picture->getError() === $this) {
+              $picture->setError(null);
+          }
+      }
+
+      return $this;
+  }
 }

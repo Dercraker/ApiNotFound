@@ -118,11 +118,7 @@ class ErrorController extends AbstractController
     $content = $request->toArray();
     dd($content['idMessages']);
 
-    $messagesToRemove = $error->getMessages();
-
-    foreach ($messagesToRemove as $message) {
-      $error->removeMessage($message);
-    }
+    $error->removeAllMessgaes();
 
     foreach ($content['idMessages'] as $idMessage) {
       // $message = $messageRepo->find($idMessage) ?? -1;
