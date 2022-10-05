@@ -15,11 +15,11 @@ class Error
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage'])]
+  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage'])]
+  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
   #[Assert\NotNull(message: "can not be null :/")]
   private int $Code = 0;
 
@@ -27,10 +27,11 @@ class Error
   private ?bool $status = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
-  #[AnnotationGroups(['getAllErrors', 'getError'])]
+  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
   private ?Collection $messages = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
+  #[AnnotationGroups(['getAllErrors', 'getError'])]
   private Collection $pictures;
 
 
@@ -112,42 +113,48 @@ class Error
     return $this;
   }
 
-  public function addMessageByIdArray(array $messagesId): self
+  /**
+   * Add messages to the error by their id.
+   * 
+   * @param array messagesId array of message ids
+   * 
+   * @return self The object itself.
+   */
+  public function addMessageByIdArray(array $messagesIds): self
   {
-    foreach ($messagesId as $messageId) {
+    foreach ($messagesIds as $messageId) {
       $this->addMessage($messageId);
     }
     return $this;
   }
-  //TODO : AddMessageByArrayOfID
 
   /**
    * @return Collection<int, Pictures>
    */
   public function getPictures(): Collection
   {
-      return $this->pictures;
+    return $this->pictures;
   }
 
   public function addPicture(Pictures $picture): self
   {
-      if (!$this->pictures->contains($picture)) {
-          $this->pictures->add($picture);
-          $picture->setError($this);
-      }
+    if (!$this->pictures->contains($picture)) {
+      $this->pictures->add($picture);
+      $picture->setError($this);
+    }
 
-      return $this;
+    return $this;
   }
 
   public function removePicture(Pictures $picture): self
   {
-      if ($this->pictures->removeElement($picture)) {
-          // set the owning side to null (unless already changed)
-          if ($picture->getError() === $this) {
-              $picture->setError(null);
-          }
+    if ($this->pictures->removeElement($picture)) {
+      // set the owning side to null (unless already changed)
+      if ($picture->getError() === $this) {
+        $picture->setError(null);
       }
+    }
 
-      return $this;
+    return $this;
   }
 }

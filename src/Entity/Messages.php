@@ -17,7 +17,7 @@ class Messages
   private ?int $id = null;
 
   #[ORM\Column(type: Types::TEXT)]
-  #[AnnotationGroups(['getAllMessages', 'getMessage', 'getError'])]
+  #[AnnotationGroups(['getAllMessages', 'getMessage', 'getError', 'getPicture'])]
   private ?string $message = null;
 
   #[ORM\ManyToOne(inversedBy: 'messages')]

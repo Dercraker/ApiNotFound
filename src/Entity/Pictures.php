@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+
 
 #[ORM\Entity(repositoryClass: PicturesRepository::class)]
 /**
@@ -17,21 +19,27 @@ class Pictures
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
+  #[AnnotationGroups(['getPicture'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
+  #[AnnotationGroups(['getPicture'])]
   private ?string $realName = null;
 
   #[ORM\Column(length: 255)]
+  #[AnnotationGroups(['getPicture'])]
   private ?string $realPath = null;
 
   #[ORM\Column(length: 255)]
+  #[AnnotationGroups(['getPicture'])]
   private ?string $publicPath = null;
 
   #[ORM\Column(length: 255)]
+  #[AnnotationGroups(['getPicture'])]
   private ?string $mimeType = null;
 
   #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+  #[AnnotationGroups(['getPicture'])]
   private ?\DateTimeInterface $uploadDate = null;
 
   /**
@@ -44,6 +52,7 @@ class Pictures
   private ?bool $status = null;
 
   #[ORM\ManyToOne(inversedBy: 'pictures')]
+  #[AnnotationGroups(['getPicture'])]
   private ?Error $Error = null;
 
 
@@ -137,13 +146,13 @@ class Pictures
 
   public function getError(): ?Error
   {
-      return $this->Error;
+    return $this->Error;
   }
 
   public function setError(?Error $Error): self
   {
-      $this->Error = $Error;
+    $this->Error = $Error;
 
-      return $this;
+    return $this;
   }
 }
