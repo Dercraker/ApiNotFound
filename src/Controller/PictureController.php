@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pictures;
 use App\Entity\Error;
 use App\Repository\PictureRepository;
+use App\Repository\PicturesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,12 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 
 class PictureController extends AbstractController
 {
-
   /**
    * It takes a picture, serializes it, and returns it as a JSON response
    * 
@@ -51,7 +52,7 @@ class PictureController extends AbstractController
 
   /**
    * It creates a new picture, saves it in the database and returns the picture's data in JSON format
-   * 
+   *
    * @param Request request The request object.
    * @param EntityManagerInterface em The entity manager
    * @param SerializerInterface serializer The serializer service
@@ -88,6 +89,21 @@ class PictureController extends AbstractController
 
     return new JsonResponse($jsonPciture, Response::HTTP_OK, ['accept' => 'json', 'location' => $location], true);
   }
+
+  #[Route('/api/picture/{pictureId}/changeError/{errorId}', name: 'picture.update', methods: ['PUT'])]
+  #[ParamConverter('picture', options: ['id' => 'pictureId'])]
+  #[ParamConverter('error', options: ['id' => 'errorId'])]
+  public function updatePicture(Pictures $picture, Error $error, Request $request, PicturesRepository $pictureRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  {
+    $picture->setError($error);
+    $em->persist($picture);
+    $em->flush();
+
+    $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+    $jsonPicture = $serializer->serialize($picture, 'json', ['groups' => 'getPicture']);
+    return new JsonResponse($jsonPicture, Response::HTTP_OK, ['location' => $location], true);
+  }
+
 
   #[Route('/api/picture/{pictureId}', name: 'picture.disable', methods: ['DELETE'])]
   #[ParamConverter('picture', options: ['id' => 'pictureId'])]

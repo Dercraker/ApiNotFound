@@ -6,6 +6,7 @@ use App\Entity\Error;
 use App\Repository\ErrorRepository;
 use App\Repository\MessagesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,6 +65,7 @@ class ErrorController extends AbstractController
    * @return JsonResponse
    */
   #[Route('/error/', name: 'error.create', methods: ['POST'])]
+  #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
   public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
   {
     $error = $serializer->deserialize(
