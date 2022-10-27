@@ -40,19 +40,6 @@ class PictureRepository extends ServiceEntityRepository
     }
   }
 
-  public function findByErrorCode(int $errorCode): array
-  {
-    //find picture aving error objectf with errorcode
-    $qd = $this->createQueryBuilder('p')
-      ->join('p.Error', 'e')
-      ->where('e.Code = :errorCode')
-      ->setParameter('errorCode', $errorCode)
-      ->getQuery()
-      ->getResult();
-
-    return $qd;
-  }
-
   //    /**
   //     * @return Picture[] Returns an array of Picture objects
   //     */

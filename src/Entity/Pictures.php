@@ -19,19 +19,19 @@ class Pictures
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getPicture'])]
+  #[AnnotationGroups(['getPicture', 'getError'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture'])]
+  #[AnnotationGroups(['getPicture', 'getError'])]
   private ?string $realName = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture'])]
+  #[AnnotationGroups(['getPicture', 'getError'])]
   private ?string $realPath = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture'])]
+  #[AnnotationGroups(['getPicture', 'getError'])]
   private ?string $publicPath = null;
 
   #[ORM\Column(length: 255)]
@@ -39,7 +39,7 @@ class Pictures
   private ?string $mimeType = null;
 
   #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-  #[AnnotationGroups(['getPicture', 'getAllErrors', 'getError', 'getMessage'])]
+  #[AnnotationGroups(['getPicture'])]
   private ?\DateTimeInterface $uploadDate = null;
 
   /**

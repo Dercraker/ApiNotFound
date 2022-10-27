@@ -27,11 +27,11 @@ class Error
   private ?bool $status = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
+  #[AnnotationGroups(['getError', 'getPicture'])]
   private ?Collection $messages = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
-  #[AnnotationGroups(['getAllErrors', 'getError'])]
+  #[AnnotationGroups(['getError'])]
   private Collection $pictures;
 
 
