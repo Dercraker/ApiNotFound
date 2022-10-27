@@ -39,6 +39,10 @@ class PictureController extends AbstractController
     $location = $request->getUriForPath('/');
     $location = $location . str_replace('/assets', 'assets', $RlLocation);
 
+    if ($pictures->isStatus() == false) {
+      return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
+    }
+
     $jsonPciture = $serializerInterface->serialize($pictures, 'json', ['groups' => 'getPicture']);
     return new JsonResponse(
       $jsonPciture,
