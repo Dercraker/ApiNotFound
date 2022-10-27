@@ -11,4 +11,4 @@ Chaque erreur pourras avoir une multitude d'images et de messages. Certains end 
 
 ### Documentation
 
-### Installation
+### Installati
