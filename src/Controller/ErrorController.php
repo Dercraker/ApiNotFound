@@ -31,6 +31,10 @@ class ErrorController extends AbstractController
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
     $errors = $repository->findAll();
+    //filter errors with true status
+    $errors = array_filter($errors, function ($error) {
+      return $error->isStatus() == true;
+    });
     $jsonErrors = $serializerInterface->serialize($errors, 'json', ['groups' => 'getAllErrors']);
     return new JsonResponse($jsonErrors, Response::HTTP_OK, [], true);
   }
@@ -49,6 +53,9 @@ class ErrorController extends AbstractController
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function getError(Error $error, SerializerInterface $serializerInterface): JsonResponse
   {
+    if ($error->isStatus() == false) {
+      return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
+    }
     $jsonError = $serializerInterface->serialize($error, 'json', ['groups' => 'getError']);
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
