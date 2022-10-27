@@ -35,6 +35,7 @@ class PictureController extends AbstractController
   #[ParamConverter('pictures', options: ['id' => 'pictureId'])]
   public function getPicture(Pictures $pictures, SerializerInterface $serializerInterface, Request $request): JsonResponse
   {
+
     $RlLocation = $pictures->getPublicPath() . '/' . $pictures->getRealPath();
     $location = $request->getUriForPath('/');
     $location = $location . str_replace('/assets', 'assets', $RlLocation);
@@ -52,6 +53,28 @@ class PictureController extends AbstractController
     );
   }
 
+
+  #[Route('/api/pictures/code/{errorCode}', name: 'pictures.getByErrorCode', methods: ['GET'])]
+  public function getPictureByErrorCode(string $errorCode, PicturesRepository $repository, SerializerInterface $serializerInterface, Request $request): JsonResponse
+  {
+    $pictures = $repository->findByErrorCode($errorCode);
+    $pictures = $repository->findOneBy(['errorCode' => $errorCode]);
+    $RlLocation = $pictures->getPublicPath() . '/' . $pictures->getRealPath();
+    $location = $request->getUriForPath('/');
+    $location = $location . str_replace('/assets', 'assets', $RlLocation);
+
+    if ($pictures->isStatus() == false) {
+      return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
+    }
+
+    $jsonPciture = $serializerInterface->serialize($pictures, 'json', ['groups' => 'getPicture']);
+    return new JsonResponse(
+      $jsonPciture,
+      Response::HTTP_OK,
+      ['accept' => 'json', 'location' => $location],
+      true
+    );
+  }
 
 
   /**

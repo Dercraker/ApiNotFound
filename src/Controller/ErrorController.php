@@ -60,6 +60,17 @@ class ErrorController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
+  #[Route('/error/code/{errorCode}', name: 'error.getByCode', methods: ['GET'])]
+  public function getErrorByCode(string $errorCode, ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
+  {
+    $error = $repository->findByErrorCode($errorCode);
+    if ($error->isStatus() == false) {
+      return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
+    }
+    $jsonError = $serializerInterface->serialize($error, 'json', ['groups' => 'getError']);
+    return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
+  }
+
   /**
    * Create a new error
    * @method POST createError()

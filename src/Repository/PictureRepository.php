@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Picture;
+use App\Entity\Pictures;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,51 +17,64 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PictureRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Picture::class);
+  public function __construct(ManagerRegistry $registry)
+  {
+    parent::__construct($registry, Picture::class);
+  }
+
+  public function save(Pictures $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->persist($entity);
+
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function save(Picture $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
+  public function remove(Pictures $entity, bool $flush = false): void
+  {
+    $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+    if ($flush) {
+      $this->getEntityManager()->flush();
     }
+  }
 
-    public function remove(Picture $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
+  public function findByErrorCode(int $errorCode): array
+  {
+    //find picture aving error objectf with errorcode
+    $qd = $this->createQueryBuilder('p')
+      ->join('p.Error', 'e')
+      ->where('e.Code = :errorCode')
+      ->setParameter('errorCode', $errorCode)
+      ->getQuery()
+      ->getResult();
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
+    return $qd;
+  }
 
-//    /**
-//     * @return Picture[] Returns an array of Picture objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+  //    /**
+  //     * @return Picture[] Returns an array of Picture objects
+  //     */
+  //    public function findByExampleField($value): array
+  //    {
+  //        return $this->createQueryBuilder('p')
+  //            ->andWhere('p.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->orderBy('p.id', 'ASC')
+  //            ->setMaxResults(10)
+  //            ->getQuery()
+  //            ->getResult()
+  //        ;
+  //    }
 
-//    public function findOneBySomeField($value): ?Picture
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+  //    public function findOneBySomeField($value): ?Picture
+  //    {
+  //        return $this->createQueryBuilder('p')
+  //            ->andWhere('p.exampleField = :val')
+  //            ->setParameter('val', $value)
+  //            ->getQuery()
+  //            ->getOneOrNullResult()
+  //        ;
+  //    }
 }

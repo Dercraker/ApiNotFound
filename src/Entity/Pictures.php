@@ -39,7 +39,7 @@ class Pictures
   private ?string $mimeType = null;
 
   #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-  #[AnnotationGroups(['getPicture'])]
+  #[AnnotationGroups(['getPicture', 'getAllErrors', 'getError', 'getMessage'])]
   private ?\DateTimeInterface $uploadDate = null;
 
   /**

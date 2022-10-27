@@ -21,7 +21,7 @@ class Error
   #[ORM\Column(length: 255)]
   #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
   #[Assert\NotNull(message: "can not be null :/")]
-  private int $Code = 0;
+  private int $Code = -1;
 
   #[ORM\Column]
   private ?bool $status = null;
