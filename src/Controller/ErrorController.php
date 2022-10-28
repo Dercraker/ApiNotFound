@@ -7,11 +7,13 @@ use App\Repository\ErrorRepository;
 use App\Repository\MessagesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -35,7 +37,9 @@ class ErrorController extends AbstractController
     $errors = array_filter($errors, function ($error) {
       return $error->isStatus() == true;
     });
-    $jsonErrors = $serializerInterface->serialize($errors, 'json', ['groups' => 'getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $jsonErrors = $serializerInterface->serialize($errors, 'json', $context);
+    // $jsonErrors = $serializerInterface->serialize($errors, 'json', ['groups' => 'getAllErrors']);
     return new JsonResponse($jsonErrors, Response::HTTP_OK, [], true);
   }
 
@@ -56,7 +60,8 @@ class ErrorController extends AbstractController
     if ($error->isStatus() == false) {
       return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
     }
-    $jsonError = $serializerInterface->serialize($error, 'json', ['groups' => 'getError']);
+    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $jsonError = $serializerInterface->serialize($error, 'json', $context);
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
@@ -67,7 +72,8 @@ class ErrorController extends AbstractController
     if ($error->isStatus() == false) {
       return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
     }
-    $jsonError = $serializerInterface->serialize($error, 'json', ['groups' => 'getError']);
+    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $jsonError = $serializerInterface->serialize($error, 'json', $context);
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
@@ -105,7 +111,8 @@ class ErrorController extends AbstractController
     $em->persist($error);
     $em->flush();
 
-    $jsonError = $serializer->serialize($error, 'json', ['groups' => 'getError']);
+    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $jsonError = $serializer->serialize($error, 'json', $context);
     $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
     return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
   }
@@ -131,23 +138,21 @@ class ErrorController extends AbstractController
       $request->getContent(),
       Error::class,
       'json',
-      [AbstractNormalizer::OBJECT_TO_POPULATE => $error]
     );
-    $updateError->setStatus(true);
-
     $content = $request->toArray();
-    dd($content['idMessages']);
 
-    $error->removeAllMessgaes()->addMessageByIdArray($content['idMessages']);
+    $updateError->setStatus(true);
+    $error->setStatus(true)
+      ->setCode($content["Code"]);
 
-
-    $message = $messageRepo->find($content['idMessages']) ?? -1;
-    $error->addMessage($message);
+    // $message = $messageRepo->find($content['idMessage']) ?? -1;
+    // $error->addMessage($message);
 
     $em->persist($error);
     $em->flush();
 
-    $jsonError = $serializer->serialize($error, 'json', ['groups' => 'getError']);
+    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $jsonError = $serializer->serialize($error, 'json', $context);
     $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
     return new JsonResponse($jsonError, Response::HTTP_OK, ['location' => $location], true);
   }

@@ -5,7 +5,8 @@ namespace App\Entity;
 use App\Repository\MessagesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: MessagesRepository::class)]
 class Messages
@@ -13,16 +14,16 @@ class Messages
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getAllMessages', 'getMessage', 'getError'])]
+  #[Groups(['getAllMessages', 'getMessage', 'getError'])]
   private ?int $id = null;
 
   #[ORM\Column(type: Types::TEXT)]
-  #[AnnotationGroups(['getAllMessages', 'getMessage', 'getError', 'getPicture'])]
+  #[Groups(['getAllMessages', 'getMessage', 'getError', 'getPicture'])]
   private ?string $message = null;
 
   #[ORM\ManyToOne(inversedBy: 'messages')]
   #[ORM\JoinColumn(nullable: false)]
-  #[AnnotationGroups(['getAllMessages', 'getMessage'])]
+  #[Groups(['getAllMessages', 'getMessage'])]
   private ?Error $Error = null;
 
   #[ORM\Column]

@@ -6,20 +6,40 @@ use App\Repository\ErrorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
 
+
+// /**
+//  * @Hateoas\Relation(
+//  *    "up",
+//  *    href = @Hateoas\Route(
+//  *       "error.getAll"
+//  *   )
+//  *    exclude = @Hateoas\Exclusion(groups = {"getAllErrors"})
+//  * )
+//  * 
+//  * @Hateoas\Relation(
+//  *     "self",
+//  *     href = @Hateoas\Route(
+//  *         "error.getByCode",
+//  *         parameters = { "errorCode" = "expr(object.getCode())" }, 
+//  *     )  
+//  *     exclusion = @Hateoas\Exclusion(groups = "getAllErrors")
+//  * )
+//  */
 #[ORM\Entity(repositoryClass: ErrorRepository::class)]
 class Error
 {
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
+  #[Groups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
+  #[Groups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
   #[Assert\NotNull(message: "can not be null :/")]
   private int $Code = -1;
 
@@ -27,11 +47,11 @@ class Error
   private ?bool $status = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
-  #[AnnotationGroups(['getError', 'getPicture'])]
+  #[Groups(['getError', 'getPicture'])]
   private ?Collection $messages = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
-  #[AnnotationGroups(['getError'])]
+  #[Groups(['getError'])]
   private Collection $pictures;
 
 

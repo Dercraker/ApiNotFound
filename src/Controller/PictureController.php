@@ -9,13 +9,17 @@ use App\Repository\PicturesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use JMS\Serializer\SerializerInterface;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
 
 
 class PictureController extends AbstractController
@@ -44,7 +48,8 @@ class PictureController extends AbstractController
       return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
     }
 
-    $jsonPciture = $serializerInterface->serialize($pictures, 'json', ['groups' => 'getPicture']);
+    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $jsonPciture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
       $jsonPciture,
       Response::HTTP_OK,
@@ -67,7 +72,8 @@ class PictureController extends AbstractController
       return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
     }
 
-    $jsonPciture = $serializerInterface->serialize($pictures, 'json', ['groups' => 'getPicture']);
+    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $jsonPciture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
       $jsonPciture,
       Response::HTTP_OK,
@@ -109,7 +115,8 @@ class PictureController extends AbstractController
     $em->persist($picture);
     $em->flush();
 
-    $jsonPciture = $serializer->serialize($picture, 'json', ['groups' => 'getPicture']);
+    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $jsonPciture = $serializer->serialize($picture, 'json', $context);
     $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
 
@@ -127,8 +134,10 @@ class PictureController extends AbstractController
     $em->flush();
 
     $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-    $jsonPicture = $serializer->serialize($picture, 'json', ['groups' => 'getPicture']);
-    return new JsonResponse($jsonPicture, Response::HTTP_OK, ['location' => $location], true);
+
+    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $jsonPciture = $serializer->serialize($picture, 'json', $context);
+    return new JsonResponse($jsonPciture, Response::HTTP_OK, ['location' => $location], true);
   }
 
 

@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+use JMS\Serializer\Annotation\Groups;
 
 
 #[ORM\Entity(repositoryClass: PicturesRepository::class)]
@@ -19,27 +19,27 @@ class Pictures
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError'])]
   private ?string $realName = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError'])]
   private ?string $realPath = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError'])]
   private ?string $publicPath = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getPicture'])]
+  #[Groups(['getPicture'])]
   private ?string $mimeType = null;
 
   #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-  #[AnnotationGroups(['getPicture'])]
+  #[Groups(['getPicture'])]
   private ?\DateTimeInterface $uploadDate = null;
 
   /**
@@ -52,7 +52,7 @@ class Pictures
   private ?bool $status = null;
 
   #[ORM\ManyToOne(inversedBy: 'pictures')]
-  #[AnnotationGroups(['getPicture'])]
+  #[Groups(['getPicture'])]
   private ?Error $Error = null;
 
 
