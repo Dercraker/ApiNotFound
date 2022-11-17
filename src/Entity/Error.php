@@ -144,7 +144,7 @@ class Error
   /**
    * Clear the pictures collection.
    */
-  public function clearAllPictures()
+  public function clearAllPictures(): void
   {
     $this->pictures->clear();
   }

@@ -60,7 +60,7 @@ class MessageController extends AbstractController
 
 
   #[Route('/message', name: 'message.create', methods: ['POST'])]
-  #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
+  //TODO! #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
   public function createMessage(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator, ErrorRepository $errorRepository): JsonResponse
   {
     $message = $serializer->deserialize(

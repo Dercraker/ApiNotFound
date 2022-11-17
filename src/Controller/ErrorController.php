@@ -72,13 +72,16 @@ class ErrorController extends AbstractController
       return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
     }
 
+    $messages = $error->getMessages()->toArray();
+    $randomMessage = $messages[array_rand($messages)];
+
     $pictures = $error->getPictures()->toArray();
     $randomPicture = $pictures[array_rand($pictures)];
 
     $error->clearAllPictures();
-    $error->addPicture($randomPicture);
-
-
+    $error->clearAllMessages($error);
+    $error->addMessage($randomMessage)
+      ->addPicture($randomPicture);
 
     $context = SerializationContext::create()->setGroups(['GetError']);
     $jsonError = $serializerInterface->serialize($error, 'json', $context);
