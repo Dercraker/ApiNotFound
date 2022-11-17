@@ -132,4 +132,12 @@ class Error
 
     return $this;
   }
+
+  /**
+   * This function clears all messages from the messages array.
+   */
+  public function clearAllMessages(): void
+  {
+    $this->messages->clear();
+  }
 }
