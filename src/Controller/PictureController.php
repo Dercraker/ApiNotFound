@@ -49,9 +49,9 @@ class PictureController extends AbstractController
     }
 
     $context = SerializationContext::create()->setGroups(['getPicture']);
-    $jsonPciture = $serializerInterface->serialize($pictures, 'json', $context);
+    $jsonPicture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
-      $jsonPciture,
+      $jsonPicture,
       Response::HTTP_OK,
       ['accept' => 'json', 'location' => $location],
       true
@@ -71,11 +71,12 @@ class PictureController extends AbstractController
     if ($pictures->isStatus() == false) {
       return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
     }
+    
 
     $context = SerializationContext::create()->setGroups(['getPicture']);
-    $jsonPciture = $serializerInterface->serialize($pictures, 'json', $context);
+    $jsonPicture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
-      $jsonPciture,
+      $jsonPicture,
       Response::HTTP_OK,
       ['accept' => 'json', 'location' => $location],
       true
