@@ -30,6 +30,7 @@ class ErrorController extends AbstractController
    * @return JsonResponse
    */
   #[Route('/errors', name: 'error.getAll', methods: ['GET'])]
+  #[OA\prop]
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
     $errors = $repository->findAll();
