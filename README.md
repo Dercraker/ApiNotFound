@@ -3,14 +3,11 @@
 ## English
 
 * Description
-* Documentation
 * Installation
 
 ### Description
 The NotFound API aims to provide a catalogue of errors, each with several custom images and messages.
 Some endpoints will get all messages and images, while others will get a random image and message based on the error code.
-
-### Documentation
 ### Requirement
 You must have an Apache and MySQL server installed. 
 We recommend :
@@ -30,7 +27,6 @@ We recommend :
 ## Français
 
 * Description
-* Documentation
 * Installation
 
 ### Description
@@ -38,7 +34,6 @@ We recommend :
 L'API NotFound a pour but de fournir un catalogue d'erreurs, chacune possédant plusieurs images et messages personnalisés.
 Certains end-point permettront d'obtenir tous les messages et images, tandis que d'autres permettront d'avoir une image et un message aléatoire en fonction du code erreur.
 
-### Documentation
 ### Prérequis
 Vous devez avoir d'installé un serveur Apache et MySQL. 
 Nous vous recommandons :
