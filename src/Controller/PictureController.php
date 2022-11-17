@@ -117,12 +117,12 @@ class PictureController extends AbstractController
     $em->flush();
 
     $context = SerializationContext::create()->setGroups(['getPicture']);
-    $jsonPciture = $serializer->serialize($picture, 'json', $context);
+    $jsonPicture = $serializer->serialize($picture, 'json', $context);
     $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
 
 
-    return new JsonResponse($jsonPciture, Response::HTTP_OK, ['accept' => 'json', 'location' => $location], true);
+    return new JsonResponse($jsonPicture, Response::HTTP_OK, ['accept' => 'json', 'location' => $location], true);
   }
 
   #[Route('/api/picture/{pictureId}/changeError/{errorId}', name: 'picture.update', methods: ['PUT'])]
@@ -137,8 +137,8 @@ class PictureController extends AbstractController
     $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
     $context = SerializationContext::create()->setGroups(['getPicture']);
-    $jsonPciture = $serializer->serialize($picture, 'json', $context);
-    return new JsonResponse($jsonPciture, Response::HTTP_OK, ['location' => $location], true);
+    $jsonPicture = $serializer->serialize($picture, 'json', $context);
+    return new JsonResponse($jsonPicture, Response::HTTP_OK, ['location' => $location], true);
   }
 
 
