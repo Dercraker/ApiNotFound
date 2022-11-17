@@ -6,6 +6,8 @@ use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Error;
 use App\Entity\Message;
+use App\Entity\Pictures;
+use DateTimeImmutable;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -43,6 +45,10 @@ class AppFixtures extends Fixture
     $json = file_get_contents(__DIR__ . '/codes.json');
     $codesList = json_decode($json, true);
 
+
+    $date = new DateTimeImmutable();
+
+
     for ($i = 0; $i < count($codesList); $i++) {
       $code = $codesList[$i];
       $message = new Message();
@@ -51,8 +57,28 @@ class AppFixtures extends Fixture
         ->setStatus(true);
       $manager->persist($message);
 
+      $dogPicture = new Pictures();
+      $dogPicture->setRealName($code['dogName'])
+        ->setPublicPath('/assets/pictures')
+        ->setMimeType('image/jpeg')
+        ->setUploadDate($date)
+        ->setRealPath($code['dogName'])
+        ->setStatus(true);
+      $manager->persist($dogPicture);
+
+      $catPicture = new Pictures();
+      $catPicture->setRealName($code['catName'])
+        ->setPublicPath('/assets/pictures')
+        ->setMimeType('image/jpeg')
+        ->setUploadDate($date)
+        ->setRealPath($code['catName'])
+        ->setStatus(true);
+      $manager->persist($catPicture);
+
       $error = new Error();
       $error->setCode($code['code'])
+        ->addPicture($dogPicture)
+        ->addPicture($catPicture)
         ->addMessage($message)
         ->setStatus(true);
       $manager->persist($error);
