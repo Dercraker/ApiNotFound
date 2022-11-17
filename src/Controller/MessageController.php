@@ -18,10 +18,49 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use OpenApi\Attributes as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 #[Route('/api')]
+#[OA\Tag(name: 'Message')]
 class MessageController extends AbstractController
 {
+  /**
+   * Liste l'ensemble des messages
+   * 
+   * @method GET getAllmessages()
+   *
+   * @param MessageRepository $repository
+   * @param SerializerInterface $serializerInterface
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne l\'ensemble des messages',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['GetAllMessages']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/messages', name: 'message.getAll', methods: ['GET'])]
   public function getAllmessages(MessageRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -34,6 +73,53 @@ class MessageController extends AbstractController
     return new JsonResponse($jsonMessages, Response::HTTP_OK, [], true);
   }
 
+  /**
+   * Retourne un message avec l'ensemble de ses images et erreurs
+   *
+   * @method GET getMessage()
+   * 
+   * @param Message $message
+   * @param SerializerInterface $serializerInterface
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageId',
+    in: 'path',
+    description: 'Id du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne un message avec l\'ensemble de ses images et erreurs',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['GetAllMessages']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message/{messageId}', name: 'message.get', methods: ['GET'])]
   #[ParamConverter('message', options: ['id' => 'messageId'])]
   public function getMessage(Message $message, SerializerInterface $serializerInterface): JsonResponse
@@ -46,6 +132,54 @@ class MessageController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
+  /**
+   * Retourne un message avec l'ensemble de ses images et erreurs
+   *
+   * @method GET getMessage()
+   * 
+   * @param integer $messageCode
+   * @param MessageRepository $repository
+   * @param SerializerInterface $serializerInterface
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageCode',
+    in: 'path',
+    description: 'Code du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne un message avec l\'ensemble de ses images et erreurs',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['GetAllMessages']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message/code/{messageCode}', name: 'message.getByCode', methods: ['GET'])]
   public function getErrorByCode(int $messageCode, MessageRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -58,7 +192,57 @@ class MessageController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
-
+  /**
+   * Create a new message
+   *
+   * @method POST createMessage()
+   * 
+   * @param Request $request
+   * @param EntityManagerInterface $em
+   * @param SerializerInterface $serializer
+   * @param UrlGeneratorInterface $urlGenerator
+   * @param ValidatorInterface $validator
+   * @param ErrorRepository $errorRepository
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageCode',
+    in: 'path',
+    description: 'Code du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 201,
+    description: 'Création réussie',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['GetAllMessages']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message', name: 'message.create', methods: ['POST'])]
   //TODO! #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
   public function createMessage(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator, ErrorRepository $errorRepository): JsonResponse
@@ -88,6 +272,57 @@ class MessageController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
   }
 
+  /**
+   * modifie un message
+   *
+   * @method PUT updateMessage()
+   * 
+   * @param Message $message
+   * @param Request $request
+   * @param EntityManagerInterface $em
+   * @param SerializerInterface $serializer
+   * @param ErrorRepository $errorRepository
+   * @param UrlGeneratorInterface $urlGenerator
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageCode',
+    in: 'path',
+    description: 'Code du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 201,
+    description: 'Création réussie',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['GetAllMessages']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message/{messageId}', name: 'message.update', methods: ['PUT'])]
   #[ParamConverter('message', options: ['id' => 'messageId'])]
   public function updateMessage(Message $message, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, ErrorRepository $errorRepository, UrlGeneratorInterface $urlGenerator): JsonResponse
@@ -113,9 +348,55 @@ class MessageController extends AbstractController
     $context = SerializationContext::create()->setGroups(['GetMessage']);
     $jsonMessage = $serializer->serialize($message, 'json', $context);
     $location = $urlGenerator->generate('message.get', ['messageId' => $message->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-    return new JsonResponse($jsonMessage, Response::HTTP_OK, ['location' => $location], true);
+    return new JsonResponse($jsonMessage, Response::HTTP_CREATED, ['location' => $location], true);
   }
 
+  /**
+   * Désactive un message
+   * 
+   * @method DELETE disableMessage()
+   *
+   * @param Message $message
+   * @param EntityManagerInterface $em
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageId',
+    in: 'path',
+    description: 'Id du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 204,
+    description: 'Désactivation réussie',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Empty']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message/{messageId}', name: 'message.disable', methods: ['DELETE'])]
   #[ParamConverter('message', options: ['id' => 'messageId'])]
   public function disableMessage(Message $message, EntityManagerInterface $em): JsonResponse
@@ -126,6 +407,53 @@ class MessageController extends AbstractController
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
   }
 
+  /**
+   * Supprime un message
+   *
+   * @method DELETE deleteError()
+   * 
+   * @param Message $message
+   * @param EntityManagerInterface $em
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'messageId',
+    in: 'path',
+    description: 'Id du message',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 204,
+    description: 'Désactivation réussie',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Empty']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Message::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/message/delete/{messageId}', name: 'message.delete', methods: ['DELETE'])]
   #[ParamConverter('message', options: ['id' => 'messageId'])]
   public function deleteError(Message $message, EntityManagerInterface $em): JsonResponse

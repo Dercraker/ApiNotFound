@@ -51,6 +51,19 @@ class ErrorController extends AbstractController
       )
     )
   )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/errors', name: 'error.getAll', methods: ['GET'])]
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -65,7 +78,7 @@ class ErrorController extends AbstractController
   }
 
   /**
-   * Retourne une erreur avec l'ensemble de ses immages et messages
+   * Retourne une erreur avec l'ensemble de ses images et messages
    * 
    * @method GET getError()
    *
@@ -87,13 +100,26 @@ class ErrorController extends AbstractController
   )]
   #[OA\Response(
     response: 200,
-    description: 'Retourne une erreur avec l\'ensemble de ses immages et messages',
+    description: 'Retourne une erreur avec l\'ensemble de ses images et messages',
     content: new OA\JsonContent(
       type: 'array',
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
           groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
         )
       )
     )
@@ -110,6 +136,53 @@ class ErrorController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
+  /**
+   * Retourne une erreur aléatoire avec l'ensemble de ses images et messages
+   * 
+   * @method GET getRandomError()
+   *
+   * @param Error $error
+   * @param SerializerInterface $serializerInterface
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne une erreur aléatoire avec l\'ensemble de ses images et messages',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/random/{errorId}', name: 'errorRandom.get', methods: ['GET'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function getRandomError(Error $error, SerializerInterface $serializerInterface): JsonResponse
@@ -134,6 +207,53 @@ class ErrorController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
+  /**
+   * Retourne une erreur avec l'ensemble de ses images et messages
+   * 
+   * @method GET getErrorByCode()
+   *
+   * @param Error $error
+   * @param SerializerInterface $serializerInterface
+   * 
+   * @return JsonResponse
+   */
+  #[OA\Parameter(
+    name: 'errorCode',
+    in: 'path',
+    description: 'Code de l\'erreur',
+    required: true,
+    example: 404,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne une erreur avec l\'ensemble de ses images et messages',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/code/{errorCode}', name: 'error.getByCode', methods: ['GET'])]
   public function getErrorByCode(string $errorCode, ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -158,6 +278,57 @@ class ErrorController extends AbstractController
    * 
    * @return JsonResponse
    */
+
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 201,
+    description: 'Création réussie',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 401,
+    description: 'Retourné si vous ne pouvez pas effectuer la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/', name: 'error.create', methods: ['POST'])]
   #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
   public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
@@ -200,6 +371,43 @@ class ErrorController extends AbstractController
    * 
    * @return JsonResponse
    */
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Modification de l\'erreur effectué',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/{errorId}', name: 'error.update', methods: ['PUT'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function updateError(Error $error, Request $request, MessagesRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
@@ -233,6 +441,43 @@ class ErrorController extends AbstractController
    * 
    * @return JsonResponse
    */
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 204,
+    description: 'Désactivation de l\'erreur effectué',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Empty']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/{errorId}', name: 'error.disable', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function disableError(Error $error, EntityManagerInterface $em): JsonResponse
@@ -255,6 +500,43 @@ class ErrorController extends AbstractController
    * 
    * @return JsonResponse
    */
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 204,
+    description: 'Suppression de l\'erreur effectué',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Empty']
+        )
+      )
+    )
+  )]
+  #[OA\Response(
+    response: 400,
+    description: 'Retourné lors d\'une erreur dans la request',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['Error']
+        )
+      )
+    )
+  )]
   #[Route('/error/delete/{errorId}', name: 'error.delete', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function deleteError(Error $error, EntityManagerInterface $em): JsonResponse
