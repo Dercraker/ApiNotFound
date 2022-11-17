@@ -19,11 +19,11 @@ class Pictures
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[Groups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError', 'GetMessage'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getPicture', 'getError'])]
+  #[Groups(['getPicture', 'getError', 'GetMessage'])]
   private ?string $realName = null;
 
   #[ORM\Column(length: 255)]

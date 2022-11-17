@@ -17,11 +17,11 @@ class Error
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[Groups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture', 'GetMessage'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getAllErrors', 'getError', 'getMessage', 'getPicture'])]
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture', 'GetMessage'])]
   #[Assert\NotNull(message: "can not be null :/")]
   private int $Code = -1;
 
@@ -29,10 +29,11 @@ class Error
   private ?bool $status = null;
 
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
-  #[Groups(['getError'])]
+  #[Groups(['GetError', 'GetMessage'])]
   private Collection $pictures;
 
-  #[ORM\OneToMany(mappedBy: 'ErrorId', targetEntity: Message::class, orphanRemoval: true)]
+  #[Groups(['GetAllErrors', 'GetError'])]
+  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Message::class, orphanRemoval: true)]
   private Collection $messages;
 
 

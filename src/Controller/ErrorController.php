@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Error;
 use App\Repository\ErrorRepository;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use JMS\Serializer\SerializerInterface;
@@ -32,11 +33,11 @@ class ErrorController extends AbstractController
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
     $errors = $repository->findAll();
-    //filter errors with true status
+
     $errors = array_filter($errors, function ($error) {
       return $error->isStatus() == true;
     });
-    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['GetAllErrors']);
     $jsonErrors = $serializerInterface->serialize($errors, 'json', $context);
     return new JsonResponse($jsonErrors, Response::HTTP_OK, [], true);
   }
@@ -58,7 +59,7 @@ class ErrorController extends AbstractController
     if ($error->isStatus() == false) {
       return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
     }
-    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['GetError']);
     $jsonError = $serializerInterface->serialize($error, 'json', $context);
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
@@ -71,7 +72,7 @@ class ErrorController extends AbstractController
     if ($error->isStatus() == false) {
       return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
     }
-    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['GetError']);
     $jsonError = $serializerInterface->serialize($error, 'json', $context);
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
@@ -89,7 +90,7 @@ class ErrorController extends AbstractController
    */
   #[Route('/error/', name: 'error.create', methods: ['POST'])]
   #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
-  public function createError(Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
+  public function createError(Request $request, MessageRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
   {
     $error = $serializer->deserialize(
       $request->getContent(),
@@ -98,11 +99,6 @@ class ErrorController extends AbstractController
     );
     $error->setStatus(true);
 
-
-    $content = $request->toArray();
-    // $message = $messageRepo->find($content['idMessage']) ?? -1;
-    // $error->addMessage($message);
-
     $fails = $validator->validate($error);
 
     if ($fails->count() > 0) return new JsonResponse($serializer->serialize($fails, 'json'), Response::HTTP_BAD_REQUEST, [], true);
@@ -110,7 +106,7 @@ class ErrorController extends AbstractController
     $em->persist($error);
     $em->flush();
 
-    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['GetError']);
     $jsonError = $serializer->serialize($error, 'json', $context);
     $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
     return new JsonResponse($jsonError, Response::HTTP_CREATED, ['location' => $location], true);
@@ -131,7 +127,7 @@ class ErrorController extends AbstractController
    */
   #[Route('/error/{errorId}', name: 'error.update', methods: ['PUT'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
-  public function updateError(Error $error, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
+  public function updateError(Error $error, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, MessageRepository $messageRepo): JsonResponse
   {
     $updateError = $serializer->deserialize(
       $request->getContent(),
@@ -144,13 +140,16 @@ class ErrorController extends AbstractController
     $error->setStatus(true)
       ->setCode($content["Code"]);
 
-    // $message = $messageRepo->find($content['idMessage']) ?? -1;
-    // $error->addMessage($message);
+    $error->messages->clear();
+    foreach ($content['idMessage'] as $messageId) {
+      $message = $messageRepo->find($messageId);
+      $error->addMessage($message);
+    }
 
     $em->persist($error);
     $em->flush();
 
-    $context = SerializationContext::create()->setGroups(['getAllErrors']);
+    $context = SerializationContext::create()->setGroups(['GetError']);
     $jsonError = $serializer->serialize($error, 'json', $context);
     $location = $urlGenerator->generate('error.get', ['errorId' => $error->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
     return new JsonResponse($jsonError, Response::HTTP_OK, ['location' => $location], true);

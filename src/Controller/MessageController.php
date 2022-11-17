@@ -68,7 +68,7 @@ class MessageController extends AbstractController
       Message::class,
       'json'
     );
-    $error = $errorRepository->find($message->getCode());
+    $error = $errorRepository->findByErrorCode($message->getCode());
     if ($error == null || $error->isStatus() == false) {
       return new JsonResponse("Error with id: " . strval($message->getCode()) . " not found", Response::HTTP_NOT_FOUND, [], true);
     }
@@ -90,7 +90,7 @@ class MessageController extends AbstractController
 
   #[Route('/message/{messageId}', name: 'message.update', methods: ['PUT'])]
   #[ParamConverter('message', options: ['id' => 'messageId'])]
-  public function updateMssage(Message $message, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, ErrorRepository $errorRepository, UrlGeneratorInterface $urlGenerator): JsonResponse
+  public function updateMessage(Message $message, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, ErrorRepository $errorRepository, UrlGeneratorInterface $urlGenerator): JsonResponse
   {
     $content = $request->toArray();
 

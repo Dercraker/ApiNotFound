@@ -11,22 +11,24 @@ class Message
 {
   #[ORM\Id]
   #[ORM\GeneratedValue]
-  #[Groups(['GetMessage', 'GetAllMessages'])]
+  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError'])]
   #[ORM\Column]
   private ?int $id = null;
 
-  #[Groups(['GetMessage', 'GetAllMessages'])]
+  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError'])]
   #[ORM\Column(length: 255)]
   private ?string $Text = null;
 
+  #[Groups(['GetAllMessages'])]
   #[ORM\Column]
   private ?bool $Status = null;
 
+  #[Groups(['GetMessage'])]
   #[ORM\ManyToOne(inversedBy: 'messages')]
   #[ORM\JoinColumn(nullable: false)]
   private ?Error $Error = null;
 
-  #[Groups(['GetMessage', 'GetAllMessages'])]
+  #[Groups(['GetMessage'])]
   #[ORM\Column]
   private ?int $Code = null;
 
