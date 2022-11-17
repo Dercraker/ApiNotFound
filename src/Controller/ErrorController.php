@@ -64,6 +64,27 @@ class ErrorController extends AbstractController
     return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
   }
 
+  #[Route('/error/random/{errorId}', name: 'errorRandom.get', methods: ['GET'])]
+  #[ParamConverter('error', options: ['id' => 'errorId'])]
+  public function getRandomError(Error $error, SerializerInterface $serializerInterface): JsonResponse
+  {
+    if ($error->isStatus() == false) {
+      return new JsonResponse("Error not found", Response::HTTP_NOT_FOUND, [], true);
+    }
+
+    $pictures = $error->getPictures()->toArray();
+    $randomPicture = $pictures[array_rand($pictures)];
+
+    $error->clearAllPictures();
+    $error->addPicture($randomPicture);
+
+
+
+    $context = SerializationContext::create()->setGroups(['GetError']);
+    $jsonError = $serializerInterface->serialize($error, 'json', $context);
+    return new JsonResponse($jsonError, Response::HTTP_OK, [], true);
+  }
+
   #[Route('/error/code/{errorCode}', name: 'error.getByCode', methods: ['GET'])]
   public function getErrorByCode(string $errorCode, ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {

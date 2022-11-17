@@ -140,4 +140,12 @@ class Error
   {
     $this->messages->clear();
   }
+
+  /**
+   * Clear the pictures collection.
+   */
+  public function clearAllPictures()
+  {
+    $this->pictures->clear();
+  }
 }
