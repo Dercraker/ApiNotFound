@@ -3,6 +3,7 @@
 ## English
 
 * Description
+* Requirement
 * Installation
 
 ### Description
@@ -27,6 +28,7 @@ We recommend :
 ## Français
 
 * Description
+* Prérequis
 * Installation
 
 ### Description
