@@ -36,7 +36,7 @@ We recommend :
 ### Description
 
 L'API NotFound a pour but de fournir un catalogue d'erreurs, chacune possédant plusieurs images et messages personnalisés.
-Certains end point permettront d'obtenir tous les messages et images, tandis que d'autres permettront d'avoir une image et un message aléatoire en fonction du code erreur.
+Certains end-point permettront d'obtenir tous les messages et images, tandis que d'autres permettront d'avoir une image et un message aléatoire en fonction du code erreur.
 
 ### Documentation
 ### Prérequis
