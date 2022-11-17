@@ -32,7 +32,7 @@ class Error
   #[Groups(['GetError', 'GetMessage'])]
   private Collection $pictures;
 
-  #[Groups(['GetAllErrors', 'GetError'])]
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture'])]
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Message::class, orphanRemoval: true)]
   private Collection $messages;
 

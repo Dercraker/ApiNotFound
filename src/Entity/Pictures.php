@@ -19,27 +19,27 @@ class Pictures
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[Groups(['getPicture', 'getError', 'GetMessage'])]
+  #[Groups(['GetPicture', 'GetError', 'GetMessage'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getPicture', 'getError', 'GetMessage'])]
+  #[Groups(['GetPicture', 'GetError', 'GetMessage'])]
   private ?string $realName = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getPicture', 'getError'])]
+  #[Groups(['GetPicture', 'GetError'])]
   private ?string $realPath = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getPicture', 'getError'])]
+  #[Groups(['GetPicture', 'GetError'])]
   private ?string $publicPath = null;
 
   #[ORM\Column(length: 255)]
-  #[Groups(['getPicture'])]
+  #[Groups(['GetPicture'])]
   private ?string $mimeType = null;
 
   #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-  #[Groups(['getPicture'])]
+  #[Groups(['GetPicture'])]
   private ?\DateTimeInterface $uploadDate = null;
 
   /**
@@ -48,11 +48,12 @@ class Pictures
    */
   private $file;
 
+  #[Groups(['GetPicture'])]
   #[ORM\Column]
   private ?bool $status = null;
 
+  #[Groups(['GetPicture'])]
   #[ORM\ManyToOne(inversedBy: 'pictures')]
-  #[Groups(['getPicture'])]
   private ?Error $Error = null;
 
 
