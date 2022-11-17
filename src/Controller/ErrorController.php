@@ -90,7 +90,7 @@ class ErrorController extends AbstractController
    */
   #[Route('/error/', name: 'error.create', methods: ['POST'])]
   #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
-  public function createError(Request $request, MessageRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
+  public function createError(Request $request, MessagesRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
   {
     $error = $serializer->deserialize(
       $request->getContent(),
@@ -98,6 +98,11 @@ class ErrorController extends AbstractController
       'json'
     );
     $error->setStatus(true);
+
+
+    $content = $request->toArray();
+    $message = $messageRepo->find($content['idMessage']) ?? -1;
+    $error->addMessage($message);
 
     $fails = $validator->validate($error);
 
@@ -127,7 +132,7 @@ class ErrorController extends AbstractController
    */
   #[Route('/error/{errorId}', name: 'error.update', methods: ['PUT'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
-  public function updateError(Error $error, Request $request, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator, MessageRepository $messageRepo): JsonResponse
+  public function updateError(Error $error, Request $request, MessagesRepository $messageRepo, EntityManagerInterface $em, SerializerInterface $serializer, UrlGeneratorInterface $urlGenerator): JsonResponse
   {
 
     $content = $request->toArray();
@@ -163,10 +168,10 @@ class ErrorController extends AbstractController
   public function disableError(Error $error, EntityManagerInterface $em): JsonResponse
   {
     $error->setStatus(false);
-    $messages = $error->getMessages();
-    foreach ($messages as $message) {
-      $message->setStatus(false);
-    }
+    // $messages = $error->getMessages();
+    // foreach ($messages as $message) {
+    //   $message->setStatus(false);
+    // }
     $em->flush();
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
   }
@@ -184,10 +189,10 @@ class ErrorController extends AbstractController
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function deleteError(Error $error, EntityManagerInterface $em): JsonResponse
   {
-    $messages = $error->getMessages();
-    foreach ($messages as $message) {
-      $em->remove($message);
-    }
+    // $messages = $error->getMessages();
+    // foreach ($messages as $message) {
+    //   $em->remove($message);
+    // }
     $em->remove($error);
     $em->flush();
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
