@@ -40,6 +40,13 @@ class ErrorRepository extends ServiceEntityRepository
   }
 
 
+  /**
+   * > This function returns an error object from the database based on the error code
+   * 
+   * @param string errorCode The error code to search for.
+   * 
+   * @return ?Error An Error object.
+   */
   public function findByErrorCode(string $errorCode): ?Error
   {
     return $this->findOneBy(['Code' => $errorCode]);
