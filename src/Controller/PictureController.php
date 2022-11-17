@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Pictures;
 use App\Entity\Error;
+use App\Repository\ErrorRepository;
 use App\Repository\PictureRepository;
 use App\Repository\PicturesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,7 +49,7 @@ class PictureController extends AbstractController
       return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
     }
 
-    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $context = SerializationContext::create()->setGroups(['GetPicture']);
     $jsonPicture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
       $jsonPicture,
@@ -59,26 +60,23 @@ class PictureController extends AbstractController
   }
 
 
-  #[Route('/api/pictures/code/{errorCode}', name: 'pictures.getByErrorCode', methods: ['GET'])]
-  public function getPictureByErrorCode(string $errorCode, PicturesRepository $repository, SerializerInterface $serializerInterface, Request $request): JsonResponse
+  #[Route('/api/pictures/code/{pictureCode}', name: 'pictures.getByErrorCode', methods: ['GET'])]
+  #[ParamConverter('pictures', options: ['id' => 'pictureCode'])]
+  public function getPictureByErrorCode(string $pictureCode, ErrorRepository $errorRepository, SerializerInterface $serializerInterface): JsonResponse
   {
-    $pictures = $repository->findByErrorCode($errorCode);
-    $pictures = $repository->findOneBy(['errorCode' => $errorCode]);
-    $RlLocation = $pictures->getPublicPath() . '/' . $pictures->getRealPath();
-    $location = $request->getUriForPath('/');
-    $location = $location . str_replace('/assets', 'assets', $RlLocation);
-
-    if ($pictures->isStatus() == false) {
+    $error = $errorRepository->findOneBy(['Code' => $pictureCode]);
+    if ($error == null) {
       return new JsonResponse("Picture not found", Response::HTTP_NOT_FOUND, [], true);
     }
-    
 
-    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $pictures = $error->getPictures()->toArray();
+
+    $context = SerializationContext::create()->setGroups(['GetPicture']);
     $jsonPicture = $serializerInterface->serialize($pictures, 'json', $context);
     return new JsonResponse(
       $jsonPicture,
       Response::HTTP_OK,
-      ['accept' => 'json', 'location' => $location],
+      [],
       true
     );
   }
@@ -116,7 +114,7 @@ class PictureController extends AbstractController
     $em->persist($picture);
     $em->flush();
 
-    $context = SerializationContext::create()->setGroups(['getPicture']);
+    $context = SerializationContext::create()->setGroups(['GetPicture']);
     $jsonPicture = $serializer->serialize($picture, 'json', $context);
     $location = $urlGenerator->generate('pictures.get', ['pictureId' => $picture->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -151,7 +149,7 @@ class PictureController extends AbstractController
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
   }
 
-  #[Route('/api/picture/{pictureId}', name: 'picture.delete', methods: ['DELETE'])]
+  #[Route('/api/picture/delete/{pictureId}', name: 'picture.delete', methods: ['DELETE'])]
   #[ParamConverter('picture', options: ['id' => 'pictureId'])]
   public function deletePicture(Pictures $picture, EntityManagerInterface $em): JsonResponse
   {

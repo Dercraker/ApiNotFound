@@ -11,11 +11,11 @@ class Message
 {
   #[ORM\Id]
   #[ORM\GeneratedValue]
-  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError'])]
+  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError', 'GetPicture'])]
   #[ORM\Column]
   private ?int $id = null;
 
-  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError'])]
+  #[Groups(['GetMessage', 'GetAllMessages', 'GetAllErrors', 'GetError', 'GetPicture'])]
   #[ORM\Column(length: 255)]
   private ?string $Text = null;
 
