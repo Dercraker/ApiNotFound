@@ -5,6 +5,7 @@
 * Description
 * Requirement
 * Installation
+* Documentation
 
 ### Description
 The NotFound API aims to provide a catalogue of errors, each with several custom images and messages.
@@ -24,12 +25,15 @@ We recommend :
 5. Open a terminal and perform a `composer install`.
 6. Perform a `symfony serve`.
 
+## Documentation
+https://red-equinox-774543.postman.co/workspace/ApiNotFound~addd4ffd-9fbf-428c-b41d-75953cd71bcb/collection/17156242-2111e6f6-72d4-4213-b097-9edfa6eff5b7?action=share&creator=23666110
 
 ## Français
 
 * Description
 * Prérequis
 * Installation
+* Documentation
 
 ### Description
 
@@ -50,3 +54,6 @@ Nous vous recommandons :
 `# DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"` en `DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"`
 5. Ouvrir un terminal et effectuer un `composer install`
 6. Effectuer un `symfony serve`.
+
+## Documentation
+https://red-equinox-774543.postman.co/workspace/ApiNotFound~addd4ffd-9fbf-428c-b41d-75953cd71bcb/collection/17156242-2111e6f6-72d4-4213-b097-9edfa6eff5b7?action=share&creator=23666110
