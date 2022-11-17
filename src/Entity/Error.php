@@ -11,24 +11,6 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Groups;
 
 
-// /**
-//  * @Hateoas\Relation(
-//  *    "up",
-//  *    href = @Hateoas\Route(
-//  *       "error.getAll"
-//  *   )
-//  *    exclude = @Hateoas\Exclusion(groups = {"getAllErrors"})
-//  * )
-//  * 
-//  * @Hateoas\Relation(
-//  *     "self",
-//  *     href = @Hateoas\Route(
-//  *         "error.getByCode",
-//  *         parameters = { "errorCode" = "expr(object.getCode())" }, 
-//  *     )  
-//  *     exclusion = @Hateoas\Exclusion(groups = "getAllErrors")
-//  * )
-//  */
 #[ORM\Entity(repositoryClass: ErrorRepository::class)]
 class Error
 {
@@ -46,19 +28,18 @@ class Error
   #[ORM\Column]
   private ?bool $status = null;
 
-  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Messages::class)]
-  #[Groups(['getError', 'getPicture'])]
-  private ?Collection $messages = null;
-
   #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
   #[Groups(['getError'])]
   private Collection $pictures;
 
+  #[ORM\OneToMany(mappedBy: 'ErrorId', targetEntity: Message::class, orphanRemoval: true)]
+  private Collection $messages;
+
 
   public function __construct()
   {
-    $this->messages = new ArrayCollection();
     $this->pictures = new ArrayCollection();
+    $this->messages = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -90,63 +71,6 @@ class Error
     return $this;
   }
 
-  /**
-   * @return Collection<int, Messages>
-   */
-  public function getMessages(): Collection
-  {
-    return $this->messages;
-  }
-
-  public function addMessage(Messages $message): self
-  {
-    if (!$this->messages->contains($message)) {
-      $this->messages->add($message);
-      $message->setError($this);
-    }
-
-    return $this;
-  }
-
-  public function removeMessage(Messages $message): self
-  {
-    if ($this->messages->removeElement($message)) {
-      // set the owning side to null (unless already changed)
-      if ($message->getError() === $this) {
-        $message->setError(null);
-      }
-    }
-
-    return $this;
-  }
-
-  /**
-   * remove all Messages on this error
-   *
-   * @return self
-   */
-  public function removeAllMessgaes(): self
-  {
-    foreach ($this->getMessages() as $message) {
-      $this->removeMessage($message);
-    }
-    return $this;
-  }
-
-  /**
-   * Add messages to the error by their id.
-   * 
-   * @param array messagesId array of message ids
-   * 
-   * @return self The object itself.
-   */
-  public function addMessageByIdArray(array $messagesIds): self
-  {
-    foreach ($messagesIds as $messageId) {
-      $this->addMessage($messageId);
-    }
-    return $this;
-  }
 
   /**
    * @return Collection<int, Pictures>
@@ -172,6 +96,36 @@ class Error
       // set the owning side to null (unless already changed)
       if ($picture->getError() === $this) {
         $picture->setError(null);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * @return Collection<int, Message>
+   */
+  public function getMessages(): Collection
+  {
+    return $this->messages;
+  }
+
+  public function addMessage(Message $message): self
+  {
+    if (!$this->messages->contains($message)) {
+      $this->messages->add($message);
+      $message->setError($this);
+    }
+
+    return $this;
+  }
+
+  public function removeMessage(Message $message): self
+  {
+    if ($this->messages->removeElement($message)) {
+      // set the owning side to null (unless already changed)
+      if ($message->getError() === $this) {
+        $message->setError(null);
       }
     }
 

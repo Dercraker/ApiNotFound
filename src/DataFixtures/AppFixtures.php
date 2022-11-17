@@ -5,9 +5,7 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Error;
-use App\Entity\Messages;
-use App\Entity\Pictures;
-use App\Repository\MessagesRepository;
+use App\Entity\Message;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -45,14 +43,12 @@ class AppFixtures extends Fixture
     $json = file_get_contents(__DIR__ . '/codes.json');
     $codesList = json_decode($json, true);
 
-    $listMessage = [];
     for ($i = 0; $i < count($codesList); $i++) {
       $code = $codesList[$i];
-
-      $message = new Messages();
-      $message->setMessage($code['message'])
+      $message = new Message();
+      $message->setText($code['message'])
+        ->setCode($code['code'])
         ->setStatus(true);
-      $listMessage[] = $message;
       $manager->persist($message);
 
       $error = new Error();
