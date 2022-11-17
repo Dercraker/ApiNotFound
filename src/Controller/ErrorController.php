@@ -168,10 +168,10 @@ class ErrorController extends AbstractController
   public function disableError(Error $error, EntityManagerInterface $em): JsonResponse
   {
     $error->setStatus(false);
-    // $messages = $error->getMessages();
-    // foreach ($messages as $message) {
-    //   $message->setStatus(false);
-    // }
+    $messages = $error->getMessages();
+    foreach ($messages as $message) {
+      $message->setStatus(false);
+    }
     $em->flush();
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
   }
@@ -189,10 +189,10 @@ class ErrorController extends AbstractController
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function deleteError(Error $error, EntityManagerInterface $em): JsonResponse
   {
-    // $messages = $error->getMessages();
-    // foreach ($messages as $message) {
-    //   $em->remove($message);
-    // }
+    $messages = $error->getMessages();
+    foreach ($messages as $message) {
+      $em->remove($message);
+    }
     $em->remove($error);
     $em->flush();
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
