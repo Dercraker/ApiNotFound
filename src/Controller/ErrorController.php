@@ -19,16 +19,38 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use OpenApi\Attributes as OA;
 
 #[Route('/api')]
+#[OA\Tag(name: 'Error')]
+#[Security(name: 'Bearer')]
 class ErrorController extends AbstractController
 {
   /**
-   * Route qui permet de récupérer les erreurs
-   * @param ErrorRepository $errorRepository
-   * @param SerializerInterface $serializer
+   * Liste l'ensemble des erreurs
+   * @method GET getAllerrors()
+   *
+   * @param ErrorRepository $repository
+   * @param SerializerInterface $serializerInterface
+   * 
    * @return JsonResponse
    */
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne l\'ensemble des erreurs',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+
+        )
+      )
+    )
+  )]
   #[Route('/errors', name: 'error.getAll', methods: ['GET'])]
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
@@ -43,15 +65,39 @@ class ErrorController extends AbstractController
   }
 
   /**
-   * Route qui permet de récupérer une erreur
-   * @method GET getError()
+   * Retourne une erreur avec l'ensemble de ses immages et messages
    * 
-   * @param int $errorID
-   * @param ErrorRepository $errorRepository
-   * @param SerializerInterface $serializer
+   * @method GET getError()
+   *
+   * @param Error $error
+   * @param SerializerInterface $serializerInterface
    * 
    * @return JsonResponse
    */
+  #[OA\Parameter(
+    name: 'errorId',
+    in: 'path',
+    description: 'Id de l\'erreur',
+    required: true,
+    example: 1,
+    schema: new OA\Schema(
+      type: 'integer',
+      format: 'int64'
+    )
+  )]
+  #[OA\Response(
+    response: 200,
+    description: 'Retourne une erreur avec l\'ensemble de ses immages et messages',
+    content: new OA\JsonContent(
+      type: 'array',
+      items: new OA\Items(
+        ref: new Model(
+          type: Error::class,
+          groups: ['GetAllErrors']
+        )
+      )
+    )
+  )]
   #[Route('/error/{errorId}', name: 'error.get', methods: ['GET'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
   public function getError(Error $error, SerializerInterface $serializerInterface): JsonResponse
@@ -79,7 +125,7 @@ class ErrorController extends AbstractController
     $randomPicture = $pictures[array_rand($pictures)];
 
     $error->clearAllPictures();
-    $error->clearAllMessages($error);
+    $error->clearAllMessages();
     $error->addMessage($randomMessage)
       ->addPicture($randomPicture);
 

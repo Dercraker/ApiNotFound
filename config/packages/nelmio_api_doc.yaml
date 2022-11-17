@@ -1,5 +1,6 @@
 nelmio_api_doc:
-  models: { use_jms: false }
+  models: { use_jms: true }
+  use_validation_groups: true
   documentation:
     info:
       title: ApiNotFound
