@@ -53,16 +53,7 @@ class ErrorController extends AbstractController
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/errors', name: 'error.getAll', methods: ['GET'])]
   public function getAllerrors(ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
@@ -106,23 +97,14 @@ class ErrorController extends AbstractController
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
-          groups: ['GetAllErrors']
+          groups: ['GetError']
         )
       )
     )
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/error/{errorId}', name: 'error.get', methods: ['GET'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
@@ -165,7 +147,7 @@ class ErrorController extends AbstractController
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
-          groups: ['GetAllErrors']
+          groups: ['GetError']
         )
       )
     )
@@ -173,15 +155,6 @@ class ErrorController extends AbstractController
   #[OA\Response(
     response: 400,
     description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
   )]
   #[Route('/error/random/{errorId}', name: 'errorRandom.get', methods: ['GET'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
@@ -208,7 +181,7 @@ class ErrorController extends AbstractController
   }
 
   /**
-   * Retourne une erreur avec l'ensemble de ses images et messages
+   * Retourne une erreur par son code avec l'ensemble de ses images et messages
    * 
    * @method GET getErrorByCode()
    *
@@ -236,23 +209,14 @@ class ErrorController extends AbstractController
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
-          groups: ['GetAllErrors']
+          groups: ['GetError']
         )
       )
     )
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/error/code/{errorCode}', name: 'error.getByCode', methods: ['GET'])]
   public function getErrorByCode(string $errorCode, ErrorRepository $repository, SerializerInterface $serializerInterface): JsonResponse
@@ -298,36 +262,18 @@ class ErrorController extends AbstractController
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
-          groups: ['GetAllErrors']
+          groups: ['GetError']
         )
       )
     )
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[OA\Response(
     response: 401,
     description: 'Retourné si vous ne pouvez pas effectuer la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
   )]
   #[Route('/error/', name: 'error.create', methods: ['POST'])]
   #[IsGranted('ROLE_ADMIN', message: 'Pfff..., tu est trop inférieur pour faire ça (╯‵□′)╯︵┻━┻')]
@@ -390,23 +336,14 @@ class ErrorController extends AbstractController
       items: new OA\Items(
         ref: new Model(
           type: Error::class,
-          groups: ['GetAllErrors']
+          groups: ['GetError']
         )
       )
     )
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/error/{errorId}', name: 'error.update', methods: ['PUT'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
@@ -454,29 +391,11 @@ class ErrorController extends AbstractController
   )]
   #[OA\Response(
     response: 204,
-    description: 'Désactivation de l\'erreur effectué',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Empty']
-        )
-      )
-    )
+    description: 'Désactivation de l\'erreur effectué'
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/error/{errorId}', name: 'error.disable', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
@@ -513,29 +432,11 @@ class ErrorController extends AbstractController
   )]
   #[OA\Response(
     response: 204,
-    description: 'Suppression de l\'erreur effectué',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Empty']
-        )
-      )
-    )
+    description: 'Suppression de l\'erreur effectué'
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Error::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/error/delete/{errorId}', name: 'error.delete', methods: ['DELETE'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]

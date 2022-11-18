@@ -23,11 +23,16 @@ We recommend :
 3. Copy/Paste the `.env` file and rename it `.env.local`.
 4. Open it and edit
 `# DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"` in `DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"`
-5. Open a terminal and perform a `composer install`.
-6. Perform a `symfony serve`.
+4. Open Xamp and start Apache and Mysql
+5. Open a terminal and perform a `composer install`
+6. In the terminal perform `php bin/console d:d:c`
+7. In the terminal perform `php bin/console d:s:u --force`
+8. In the terminal perform `php bin/console d:f:l`
+9. In the terminal perform `symfony serve`
 
 ## Documentation
-[Link to the documentation Postman.](https://red-equinox-774543.postman.co/workspace/ApiNotFound~addd4ffd-9fbf-428c-b41d-75953cd71bcb/collection/17156242-2111e6f6-72d4-4213-b097-9edfa6eff5b7?action=share&creator=23666110)
+[Link to the documentation Postman.](https://we.tl/t-TjIMAnDh8j)
+[Doccumentations Namios ](http://127.0.0.1:8000/swagger)
 
 ## Français
 
@@ -53,8 +58,13 @@ Nous vous recommandons :
 3. Copier/Coller le fichier `.env` et renommer le `.env.local`.
 4. L'ouvrir et modifier 
 `# DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"` en `DATABASE_URL="mysql://root@127.0.0.1:3306/app?serverVersion=8&charset=utf8mb4"`
+4. Ouvrir Xamp et démarer Apache et Mysql
 5. Ouvrir un terminal et effectuer un `composer install`
-6. Effectuer un `symfony serve`.
+6. Dans le terminal effectuer `php bin/console d:d:c`
+7. Dans le terminal effectuer `php bin/console d:s:u --force`
+8. Dans le terminal effectuer `php bin/console d:f:l`
+9. Dans le terminal effectuer `symfony serve`.
 
 ## Documentation
-[Lien vers la documentation Postman.](https://red-equinox-774543.postman.co/workspace/ApiNotFound~addd4ffd-9fbf-428c-b41d-75953cd71bcb/collection/17156242-2111e6f6-72d4-4213-b097-9edfa6eff5b7?action=share&creator=23666110)
+[Lien vers la docummentation PostMan.](https://we.tl/t-TjIMAnDh8j)
+[Doccumentations Namios ](http://127.0.0.1:8000/swagger)

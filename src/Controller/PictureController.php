@@ -23,8 +23,10 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation\Groups;
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 #[OA\Tag(name: 'Picture')]
+#[Security(name: 'Bearer')]
 class PictureController extends AbstractController
 {
   /**
@@ -66,16 +68,7 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/pictures/{pictureId}', name: 'pictures.get', methods: ['GET'])]
   #[ParamConverter('pictures', options: ['id' => 'pictureId'])]
@@ -137,16 +130,7 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/pictures/code/{pictureCode}', name: 'pictures.getByErrorCode', methods: ['GET'])]
   #[ParamConverter('pictures', options: ['id' => 'pictureCode'])]
@@ -212,16 +196,7 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/picture/add/{errorId}', name: 'picture.create', methods: ['POST'])]
   #[ParamConverter('error', options: ['id' => 'errorId'])]
@@ -302,16 +277,7 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/picture/{pictureId}/changeError/{errorId}', name: 'picture.update', methods: ['PUT'])]
   #[ParamConverter('picture', options: ['id' => 'pictureId'])]
@@ -352,29 +318,11 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 204,
-    description: 'Désactivation réussie',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Empty']
-        )
-      )
-    )
+    description: 'Désactivation réussie'
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/picture/{pictureId}', name: 'picture.disable', methods: ['DELETE'])]
   #[ParamConverter('picture', options: ['id' => 'pictureId'])]
@@ -408,29 +356,11 @@ class PictureController extends AbstractController
   )]
   #[OA\Response(
     response: 204,
-    description: 'Suppression réussie',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Empty']
-        )
-      )
-    )
+    description: 'Suppression réussie'
   )]
   #[OA\Response(
     response: 400,
-    description: 'Retourné lors d\'une erreur dans la request',
-    content: new OA\JsonContent(
-      type: 'array',
-      items: new OA\Items(
-        ref: new Model(
-          type: Pictures::class,
-          groups: ['Error']
-        )
-      )
-    )
+    description: 'Retourné lors d\'une erreur dans la request'
   )]
   #[Route('/api/picture/delete/{pictureId}', name: 'picture.delete', methods: ['DELETE'])]
   #[ParamConverter('picture', options: ['id' => 'pictureId'])]
