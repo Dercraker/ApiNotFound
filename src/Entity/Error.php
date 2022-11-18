@@ -6,7 +6,10 @@ use App\Repository\ErrorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups as AnnotationGroups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ErrorRepository::class)]
 class Error
@@ -14,27 +17,30 @@ class Error
   #[ORM\Id]
   #[ORM\GeneratedValue]
   #[ORM\Column]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture', 'GetMessage'])]
   private ?int $id = null;
 
   #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
-  private ?string $Code = null;
-
-  #[ORM\Column(length: 255)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
-  private ?string $Message = null;
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture', 'GetMessage'])]
+  #[Assert\NotNull(message: "can not be null :/")]
+  private int $Code = -1;
 
   #[ORM\Column]
   private ?bool $status = null;
 
-  #[ORM\OneToMany(mappedBy: 'pictureLink', targetEntity: Pictures::class, orphanRemoval: true)]
-  #[AnnotationGroups(['getAllErrors', 'getError', 'getPicture'])]
+  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Pictures::class)]
+  #[Groups(['GetError', 'GetMessage'])]
   private Collection $pictures;
+
+  #[Groups(['GetAllErrors', 'GetError', 'GetPicture'])]
+  #[ORM\OneToMany(mappedBy: 'Error', targetEntity: Message::class, orphanRemoval: true)]
+  private Collection $messages;
+
 
   public function __construct()
   {
     $this->pictures = new ArrayCollection();
+    $this->messages = new ArrayCollection();
   }
 
   public function getId(): ?int
@@ -54,18 +60,6 @@ class Error
     return $this;
   }
 
-  public function getMessage(): ?string
-  {
-    return $this->Message;
-  }
-
-  public function setMessage(string $Message): self
-  {
-    $this->Message = $Message;
-
-    return $this;
-  }
-
   public function isStatus(): ?bool
   {
     return $this->status;
@@ -77,6 +71,7 @@ class Error
 
     return $this;
   }
+
 
   /**
    * @return Collection<int, Pictures>
@@ -90,7 +85,7 @@ class Error
   {
     if (!$this->pictures->contains($picture)) {
       $this->pictures->add($picture);
-      $picture->setPictureLink($this);
+      $picture->setError($this);
     }
 
     return $this;
@@ -100,11 +95,57 @@ class Error
   {
     if ($this->pictures->removeElement($picture)) {
       // set the owning side to null (unless already changed)
-      if ($picture->getPictureLink() === $this) {
-        $picture->setPictureLink(null);
+      if ($picture->getError() === $this) {
+        $picture->setError(null);
       }
     }
 
     return $this;
+  }
+
+  /**
+   * @return Collection<int, Message>
+   */
+  public function getMessages(): Collection
+  {
+    return $this->messages;
+  }
+
+  public function addMessage(Message $message): self
+  {
+    if (!$this->messages->contains($message)) {
+      $this->messages->add($message);
+      $message->setError($this);
+    }
+
+    return $this;
+  }
+
+  public function removeMessage(Message $message): self
+  {
+    if ($this->messages->removeElement($message)) {
+      // set the owning side to null (unless already changed)
+      if ($message->getError() === $this) {
+        $message->setError(null);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * This function clears all messages from the messages array.
+   */
+  public function clearAllMessages(): void
+  {
+    $this->messages->clear();
+  }
+
+  /**
+   * Clear the pictures collection.
+   */
+  public function clearAllPictures(): void
+  {
+    $this->pictures->clear();
   }
 }
