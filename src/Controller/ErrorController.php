@@ -280,9 +280,9 @@ class ErrorController extends AbstractController
    */
 
   #[OA\Parameter(
-    name: 'errorId',
+    name: 'errorCode',
     in: 'path',
-    description: 'Id de l\'erreur',
+    description: 'Code de l\'erreur',
     required: true,
     example: 1,
     schema: new OA\Schema(
@@ -372,9 +372,9 @@ class ErrorController extends AbstractController
    * @return JsonResponse
    */
   #[OA\Parameter(
-    name: 'errorId',
+    name: 'errorCode',
     in: 'path',
-    description: 'Id de l\'erreur',
+    description: 'Code de l\'erreur',
     required: true,
     example: 1,
     schema: new OA\Schema(

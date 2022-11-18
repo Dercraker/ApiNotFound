@@ -187,9 +187,9 @@ class PictureController extends AbstractController
    * - The option to return the response as an array
    */
   #[OA\Parameter(
-    name: 'pictureId',
+    name: 'pictureCode',
     in: 'path',
-    description: 'Id de l\'image',
+    description: 'Code de l\'image',
     required: true,
     example: 1,
     schema: new OA\Schema(
@@ -266,9 +266,9 @@ class PictureController extends AbstractController
    * @return JsonResponse
    */
   #[OA\Parameter(
-    name: 'pictureId',
+    name: 'pictureCode',
     in: 'path',
-    description: 'Id de l\'image',
+    description: 'Code de l\'image',
     required: true,
     example: 1,
     schema: new OA\Schema(

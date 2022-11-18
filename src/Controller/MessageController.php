@@ -181,7 +181,7 @@ class MessageController extends AbstractController
     )
   )]
   #[Route('/message/code/{messageCode}', name: 'message.getByCode', methods: ['GET'])]
-  public function getErrorByCode(int $messageCode, MessageRepository $repository, SerializerInterface $serializerInterface): JsonResponse
+  public function getMessageByCode(int $messageCode, MessageRepository $repository, SerializerInterface $serializerInterface): JsonResponse
   {
     $message = $repository->findMessageByCode($messageCode);
     if ($message == null || $message->isStatus() == false) {
